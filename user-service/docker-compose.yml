@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:15-alpine3.18
+    restart: always
+    ports:
+      - "54320:5432"
+    environment:
+      - POSTGRES_USER=user_admin
+      - POSTGRES_PASSWORD=user_password
+      - POSTGRES_DB=user_db
