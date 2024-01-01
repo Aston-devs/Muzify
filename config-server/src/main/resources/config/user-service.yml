@@ -1,0 +1,18 @@
+server:
+  port: 8090
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+    hostname: localhost
+
+spring:
+  datasource:
+    name: user_db
+    username: user_admin
+    password: user_password
