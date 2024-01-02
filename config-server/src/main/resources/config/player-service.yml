@@ -10,3 +10,7 @@ eureka:
       instance:
         prefer-ip-address: true
         hostname: localhost
+s3:
+  endpointUrl: https://hb.ru-msk.vkcs.cloud
+  accessKey: 2JsphuxDdFwPhhsb5mGDox
+  secretKey: 6jVsKEUvBqNJthDffVHiHkGeY65yUJLzkFs8q4LKAGVs
