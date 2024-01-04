@@ -1,6 +1,7 @@
 val lombokVersion = "1.18.30"
 
 dependencies {
+    annotationProcessor("org.projectlombok:lombok")
     runtimeOnly("org.postgresql:postgresql")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.cloud:spring-cloud-starter-config")
