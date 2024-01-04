@@ -8,7 +8,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
     implementation("org.flywaydb:flyway-core")
-    implementation("org.hibernate.validator:hibernate-validator:8.0.1.Final")
+    implementation("org.springframework.boot:spring-boot-starter-validation:3.2.1")
 
     compileOnly("org.projectlombok:lombok:1.18.30")
 
