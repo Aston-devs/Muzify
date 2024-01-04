@@ -1,4 +1,4 @@
-package ru.musify.musicservice.model;
+package ru.musify.musicservice.model.entity;
 
 import lombok.Getter;
 
