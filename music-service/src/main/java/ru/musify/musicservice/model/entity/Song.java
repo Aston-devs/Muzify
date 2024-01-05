@@ -11,6 +11,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.sql.Time;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -50,4 +51,25 @@ public class Song extends BaseEntity {
 
   @Column(name = "release_date")
   private LocalDateTime releaseDate;
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof Song song)) {
+      return false;
+    }
+    return Objects.equals(getId(), ((Song) o).getId()) && Objects.equals(title, song.title)
+        && Objects.equals(author,
+        song.author) && Objects.equals(cover, song.cover) && Objects.equals(
+        duration, song.duration) && genre == song.genre && Objects.equals(album, song.album)
+        && Objects.equals(url, song.url) && Objects.equals(releaseDate,
+        song.releaseDate);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(title, author, cover, duration, genre, album, url, releaseDate, getId());
+  }
 }
