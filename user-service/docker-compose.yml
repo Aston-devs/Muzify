@@ -10,3 +10,11 @@ services:
       - POSTGRES_USER=user_admin
       - POSTGRES_PASSWORD=user_password
       - POSTGRES_DB=user_db
+
+  keycloak:
+    image: jboss/keycloak
+    environment:
+      - KEYCLOAK_USER=user_admin
+      - KEYCLOAK_PASSWORD=user_password
+    ports:
+      - "8443:8443"
