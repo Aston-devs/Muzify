@@ -23,6 +23,3 @@ spring:
     password: music_password
     locations: classpath:db/migration
     schemas: music_service
-  jpa:
-    hibernate:
-      ddl-auto: validate

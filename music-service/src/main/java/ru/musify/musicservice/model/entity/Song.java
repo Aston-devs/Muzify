@@ -6,11 +6,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.sql.Time;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -51,6 +53,9 @@ public class Song extends BaseEntity {
 
   @Column(name = "release_date")
   private LocalDateTime releaseDate;
+
+  @ManyToMany(mappedBy = "userSongs")
+  private List<User> users;
 
   @Override
   public boolean equals(Object o) {
