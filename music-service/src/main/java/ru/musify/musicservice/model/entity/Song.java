@@ -38,7 +38,7 @@ public class Song extends BaseEntity {
   @JoinColumn(name = "cover_id", unique = true)
   private Cover cover;
 
-  @Column(name = "duration", nullable = false, columnDefinition = "TIME")
+  @Column(name = "duration", columnDefinition = "TIME")
   private Time duration;
 
   @Column(name = "genre")
