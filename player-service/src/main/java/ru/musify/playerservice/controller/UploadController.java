@@ -26,5 +26,4 @@ public class UploadController {
             return ResponseEntity.ok("File uploaded successfully");
         });
     }
-
 }
