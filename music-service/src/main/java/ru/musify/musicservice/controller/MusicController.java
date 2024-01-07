@@ -1,5 +1,7 @@
 package ru.musify.musicservice.controller;
 
+import static jakarta.servlet.http.HttpServletResponse.SC_OK;
+
 import java.util.List;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
@@ -52,10 +54,7 @@ public class MusicController {
   @GetMapping("/{userId}")
   @ResponseStatus(code = HttpStatus.OK)
   public UserSongsDto getUserSongs(@PathVariable UUID userId) {
-    if (!userService.isUserExists(userId)) {
-      log.debug("User does not exist with id {}", userId);
-      throw new UserNotExistException("User does not exist with id " + userId);
-    }
+    isUserExists(userId);
 
     List<SongDto> userSongs = userService.findSongsByUserId(userId);
     UserSongsDto userSongsDto = UserSongsDto.builder()
@@ -72,10 +71,7 @@ public class MusicController {
   @ResponseStatus(code = HttpStatus.CREATED)
   public SongDto addSongToUser(@PathVariable UUID userId,
       @RequestParam(name = "trackId") UUID songId) {
-    if (!userService.isUserExists(userId)) {
-      log.debug("User does not exist with id {}", userId);
-      throw new UserNotExistException("User does not exist with id " + userId);
-    }
+    isUserExists(userId);
 
     SongDto songDto = songService.findById(songId);
 
@@ -93,10 +89,7 @@ public class MusicController {
   @ResponseStatus(code = HttpStatus.OK)
   public ResponseData removeSongFromUser(@PathVariable UUID userId,
       @RequestParam(name = "trackId") UUID songId) {
-    if (!userService.isUserExists(userId)) {
-      log.debug("User does not exist with id {}", userId);
-      throw new UserNotExistException("User does not exist with id " + userId);
-    }
+    isUserExists(userId);
 
     SongDto songDto = songService.findById(songId);
 
@@ -109,8 +102,15 @@ public class MusicController {
     }
 
     return ResponseData.builder()
-        .statusCode(2)
+        .statusCode(SC_OK)
         .message("Song is removed - " + isRemoved)
         .build();
+  }
+
+  public void isUserExists(UUID id) {
+    if (!userService.isUserExists(id)) {
+      log.debug("User does not exist with id {}", id);
+      throw new UserNotExistException("User does not exist with id " + id);
+    }
   }
 }
