@@ -19,6 +19,7 @@ public interface SongMapper {
   SongDto toDto(Song song);
 
   @Mapping(source = "songUrl", target = "url")
-  @Mapping(source = "coverUrl", target = MappingConstants.NULL, ignore = true)
+  @Mapping(target = "cover", ignore = true)
+  @Mapping(target = "author", ignore = true)
   Song toEntity(NewSongDto newSongDto);
 }

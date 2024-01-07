@@ -76,4 +76,10 @@ public class AuthorServiceImpl implements AuthorService {
 
     log.info("Removed author with id {}", id);
   }
+
+  @Override
+  @Transactional(readOnly = true)
+  public Author findByName(String author) {
+    return repository.findAuthorByName(author);
+  }
 }

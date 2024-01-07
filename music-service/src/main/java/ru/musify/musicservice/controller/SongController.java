@@ -22,8 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.musify.musicservice.handler.ResponseData;
 import ru.musify.musicservice.model.dto.NewSongDto;
 import ru.musify.musicservice.model.dto.SongDto;
+import ru.musify.musicservice.model.entity.Author;
 import ru.musify.musicservice.model.entity.Cover;
 import ru.musify.musicservice.model.entity.Song;
+import ru.musify.musicservice.service.AuthorService;
 import ru.musify.musicservice.service.SongService;
 import ru.musify.musicservice.util.mapper.SongMapper;
 
@@ -34,11 +36,15 @@ public class SongController {
 
   private final SongService songService;
 
+  private final AuthorService authorService;
+
   private final SongMapper songMapper;
 
   @Autowired
-  public SongController(SongService songService, SongMapper songMapper) {
+  public SongController(SongService songService, AuthorService authorService,
+      SongMapper songMapper) {
     this.songService = songService;
+    this.authorService = authorService;
     this.songMapper = songMapper;
   }
 
@@ -50,8 +56,15 @@ public class SongController {
     Song song = songMapper.toEntity(newSongDto);
 
     String coverUrl = newSongDto.coverUrl();
+    String authorName = newSongDto.author();
+
     if (isNotBlank(coverUrl)) {
       song.setCover(new Cover(coverUrl));
+    }
+
+    if (isNotBlank(authorName)) {
+      Author author = authorService.findByName(authorName);
+      song.setAuthor(author);
     }
 
     SongDto savedSong = songService.save(song);

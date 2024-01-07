@@ -14,4 +14,6 @@ public interface AuthorRepository extends JpaRepository<Author, UUID> {
   @Modifying
   @Query("delete from Author a where a.id = :id")
   void deleteById(@NonNull UUID id);
+
+  Author findAuthorByName(@NonNull String name);
 }
