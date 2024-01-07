@@ -4,6 +4,8 @@ import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 import static org.mapstruct.ReportingPolicy.IGNORE;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import ru.musify.musicservice.model.dto.NewSongDto;
 import ru.musify.musicservice.model.dto.SongDto;
 import ru.musify.musicservice.model.entity.Song;
 
@@ -14,4 +16,9 @@ public interface SongMapper {
   Song toEntity(SongDto dto);
 
   SongDto toDto(Song song);
+
+  @Mapping(source = "songUrl", target = "url")
+  @Mapping(target = "cover", ignore = true)
+  @Mapping(target = "author", ignore = true)
+  Song toEntity(NewSongDto newSongDto);
 }
