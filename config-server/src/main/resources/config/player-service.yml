@@ -19,3 +19,5 @@ spring:
     multipart:
       max-file-size: 30MB
       max-request-size: 30MB
+  kafka:
+    bootstrap-servers: localhost:9092
