@@ -12,20 +12,28 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 
 import java.time.Duration;
 
+/**
+ * Redis caching configuration.
+ */
 @Configuration
 @EnableCaching
 public class RedisCacheConfiguration {
 
-    @Bean
-    public CacheManager cacheManager(RedisConnectionFactory connectionFactory) {
 
-        // RedisCacheWriter - избегает блокировок, позволяет улучшить производительность
-        // и параллельную обработку операций с кэшем
+    /**
+     * Creates a Redis cache manager.
+     *
+     * @param connectionFactory factory for connecting to Redis
+     * @return Redis cache manager
+     */
+    @Bean
+    public CacheManager redisCacheManager(RedisConnectionFactory connectionFactory) {
+
         RedisCacheWriter cacheWriter = RedisCacheWriter.nonLockingRedisCacheWriter(connectionFactory);
 
         org.springframework.data.redis.cache.RedisCacheConfiguration configuration = org.springframework.data.redis.cache.RedisCacheConfiguration
-                .defaultCacheConfig() // Получение конфигурации кэша по умолчанию
-                .entryTtl(Duration.ofMinutes(10)) // Установка времени жизни записей в кэше (10 минут)
+                .defaultCacheConfig()
+                .entryTtl(Duration.ofMinutes(10))
                 .serializeValuesWith(
                         RedisSerializationContext
                         .SerializationPair
