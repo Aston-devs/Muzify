@@ -1,0 +1,313 @@
+openapi: 3.0.1
+info:
+  title: "The Musify"
+  description: The Musify project is a music streaming service being developed as part
+    of an educational internship at Aston company. The project's goal is to create a modern
+    and intuitively designed platform for streaming music with unique
+    features and a user-friendly interface.
+  version: 1.0.0
+servers:
+  - url: http://localhost:9000/musify
+    description: develop url
+
+paths:
+  /audios:
+    get:
+      tags:
+        - Audios
+      summary: get all audios in a section news
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          description: Page size
+          required: false
+          schema:
+            type: integer
+            default: 20
+      requestBody:
+        description: base request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IRequest'
+      responses:
+        200:
+          description: successful request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListSongResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /audios/{userId}:
+    get:
+      tags:
+        - Audios
+      summary: get user audios in the "My music" section
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          description: Page size
+          required: false
+          schema:
+            type: integer
+            default: 20
+      requestBody:
+        description: base request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IRequest'
+      responses:
+        200:
+          description: successful request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListSongResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    patch:
+      tags:
+        - Audios
+      summary: add song to user playlist
+      parameters:
+        - name: trackId
+          in: query
+          required: true
+      requestBody:
+        description: base request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IRequest'
+      responses:
+        200:
+          description: successful request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddSongResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      tags:
+        - Audios
+      summary: remove song from user playlist
+      parameters:
+        - name: trackId
+          in: query
+          required: true
+      requestBody:
+        description: base request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IRequest'
+      responses:
+        200:
+          description: successful request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemoveSongResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /audios/upload:
+    post:
+      tags:
+        - Upload Audio
+      summary: Upload Audio to server
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+              required:
+                - file
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewSongRequest'
+      responses:
+        201:
+          description: upload successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadResponse'
+        500:
+          description: upload error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    IRequest:
+      type: object
+      description: Basic interface for all requests
+      properties:
+        requestId:
+          type: string
+          example: some request id
+          description: Debug request ID
+        timestamp:
+          type: string
+          format: date-time
+          description: Request timestamp
+
+    IResponse:
+      type: object
+      description: Basic interface for all responses
+      properties:
+        requestId:
+          type: string
+          example: some request id
+          description: Debug response Id
+        timestamp:
+          type: string
+          format: date-time
+          description: Response timestamp
+        result:
+          allOf:
+            - $ref: '#/components/schemas/ResponseResult'
+
+    ResponseResult:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: Ok
+
+    Error:
+      type: object
+      properties:
+        statusCode:
+          type: string
+          example: 500
+        message:
+          type: string
+          example: Operation error
+
+    BaseSong:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Something In The Way
+        author:
+          type: string
+          example: Nirvana
+
+    SongDto:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/BaseSong'
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: unique id
+        cover:
+          type: object
+          properties:
+            S3Url:
+              type: string
+              description: URL in S3 storage
+              example: Something In The Way IMG URL
+        S3Url:
+          type: string
+          description: URL in S3 storage
+          example: Something In The Way URL
+
+    NewSongRequest:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/BaseSong'
+
+    UploadResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - type: object
+          properties:
+            result:
+              description: Result of the upload audio operation to server
+              example: { "statusCode": 201, "message": "Resource uploaded successfully" }
+
+    ListSongResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - type: object
+          properties:
+            songs:
+              type: array
+              items:
+                $ref: '#/components/schemas/SongDto'
+
+    RemoveSongResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - type: object
+          properties:
+            result:
+              description: Result of the remove song operation
+              example: { "statusCode": 200, "message": "Song was removed" }
+
+    AddSongResponse:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - type: object
+          properties:
+            result:
+              description: Result of the adding the song to user playlist
+              example: { "statusCode": 200, "message": "Song was added to user playlist" }
