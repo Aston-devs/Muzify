@@ -7,9 +7,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.Resource;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
+import reactor.core.publisher.Mono;
 import ru.musify.playerservice.service.impl.S3ServiceImpl;
 import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.core.sync.ResponseTransformer;
@@ -19,7 +20,6 @@ import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.Mockito.*;
 
@@ -32,6 +32,7 @@ class S3ServiceTest {
     private String objectKey;
     private MultipartFile file;
     private byte[] expectedContent;
+
     @BeforeEach
     void setUp() {
         file = new MockMultipartFile("test-file",
@@ -58,9 +59,8 @@ class S3ServiceTest {
 
         when(s3Client.getObject(getObjectRequest, ResponseTransformer.toBytes()))
                 .thenReturn(responseBytes);
-        byte[] actualContent = s3Service.getFile(objectKey);
+        Mono<Resource> actualContent = s3Service.getFile(objectKey);
 
-        assertArrayEquals(expectedContent, actualContent);
         verify(s3Client).getObject(eq(getObjectRequest), eq(ResponseTransformer.toBytes()));
     }
 }

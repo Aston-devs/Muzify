@@ -1,13 +1,12 @@
 package ru.musify.playerservice.utils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class ExceptionThrower {
-    private static final Logger LOG = LoggerFactory.getLogger(ExceptionThrower.class);
 
-    public static void handleUploadFailure(RuntimeException exception, String message) {
-        LOG.error(message);
-        throw exception;
+    public static void handleUploadFailure(RuntimeException e) {
+        log.error(e.getMessage());
+        throw e;
     }
 }
