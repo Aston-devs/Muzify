@@ -32,16 +32,17 @@ openApiGenerate {
     }
 
     configOptions.set(
-        mapOf(
-            "dateLibrary" to "java8",
-            "openApiNullable" to "false",
-            "dynamicOperations" to "true",
-            "serializableModel" to "true",
-            "sourceFolder" to "src/main/java",
-            "serializationLibrary" to "jackson",
-            "enumPropertyNaming" to "UPPERCASE",
-            "prependFormOrBodyParameters" to "true"
-        )
+            mapOf(
+                    "dateLibrary" to "java8",
+                    "openApiNullable" to "false",
+                    "dynamicOperations" to "true",
+                    "serializableModel" to "true",
+                    "sourceFolder" to "src/main/java",
+                    "serializationLibrary" to "jackson",
+                    "enumPropertyNaming" to "UPPERCASE",
+                    "prependFormOrBodyParameters" to "true",
+                    "additionalModelTypeAnnotations" to "@lombok.AllArgsConstructor;@lombok.NoArgsConstructor;@lombok.Builder"
+            )
     )
 }
 
