@@ -1,0 +1,35 @@
+.header-container {
+  margin: 0rem 5.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.musify-logo {
+  width: 8rem;
+  height: 8rem;
+}
+
+.header {
+  background-image: url("backgroundLogo.png");
+  height: 120vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+}
+
+.header-musify-word {
+  margin: 19rem 5.3rem 0 5.3rem;
+}
+
+.header-tagline {
+  width: 17.1875rem;
+  height: 5.5rem;
+  color: var(--color, #503e74);
+  font-family: Gabarito;
+  font-size: 1.5rem;
+  font-weight: 400;
+  line-height: normal;
+  margin: 0.5rem 10rem;
+}
