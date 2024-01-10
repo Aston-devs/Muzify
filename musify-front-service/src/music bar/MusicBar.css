@@ -1,0 +1,32 @@
+.bar-container {
+  margin: 2rem 34.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6.42794rem;
+}
+
+.music-bar-button {
+  color: var(--2, #503e74);
+  font-family: Geometria;
+  font-size: 1.73731rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background-color: white;
+}
+
+.music-bar-button.active {
+  color: white;
+  display: flex;
+  width: 8.9375rem;
+  height: 2.5625rem;
+  padding: 0.43431rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.43431rem;
+  border-radius: 0.75rem;
+  background: var(--2, #503e74);
+}
