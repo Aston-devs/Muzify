@@ -1,3 +1,13 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
+    hostname: localhost
+
 spring:
   application:
     name: api-gateway
@@ -5,3 +15,31 @@ spring:
     active: dev
   config:
     import: configserver:http://localhost:8888
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      filters:
+        - TokenRelay=
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8080/realms/muzify-gateway
+        registration:
+          keycloak:
+            provider: keycloak
+            client-id: muzify-gateway-client
+            client-secret: lN88DuqYtwM7cfT0XeO3txXEjYcTuwxe
+            authorization-grant-type: authorization_code
+            scope: openid
+
+server:
+  port: 8081
+
+muzify:
+  url:
+    logout: http://localhost:8080
