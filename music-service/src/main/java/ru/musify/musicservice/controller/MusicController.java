@@ -4,8 +4,9 @@ import static jakarta.servlet.http.HttpServletResponse.SC_OK;
 
 import java.util.List;
 import java.util.UUID;
+
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,16 +18,17 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.musify.musicservice.handler.ResponseData;
 import ru.musify.musicservice.handler.exception.UserNotExistException;
-import ru.musify.musicservice.model.dto.SongDto;
-import ru.musify.musicservice.model.dto.UserDto;
-import ru.musify.musicservice.model.dto.UserSongsDto;
-import ru.musify.musicservice.model.entity.User;
+import ru.musify.musicservice.dto.SongDto;
+import ru.musify.musicservice.dto.UserDto;
+import ru.musify.musicservice.dto.UserSongsDto;
+import ru.musify.musicservice.entity.User;
 import ru.musify.musicservice.service.SongService;
 import ru.musify.musicservice.service.UserService;
 import ru.musify.musicservice.util.mapper.UserMapper;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/musify/audios")
 public class MusicController {
 
@@ -35,13 +37,6 @@ public class MusicController {
   private final UserService userService;
 
   private final UserMapper userMapper;
-
-  @Autowired
-  public MusicController(SongService songService, UserService userService, UserMapper userMapper) {
-    this.songService = songService;
-    this.userService = userService;
-    this.userMapper = userMapper;
-  }
 
   @GetMapping
   @ResponseStatus(code = HttpStatus.OK)
@@ -58,7 +53,6 @@ public class MusicController {
 
     List<SongDto> userSongs = userService.findSongsByUserId(userId);
     UserSongsDto userSongsDto = UserSongsDto.builder()
-        .id(userId)
         .songs(userSongs)
         .build();
 
@@ -67,7 +61,7 @@ public class MusicController {
     return userSongsDto;
   }
 
-  @PatchMapping("/add/{userId}")
+  @PatchMapping("/{userId}")
   @ResponseStatus(code = HttpStatus.CREATED)
   public SongDto addSongToUser(@PathVariable UUID userId,
       @RequestParam(name = "trackId") UUID songId) {

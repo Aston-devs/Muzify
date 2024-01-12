@@ -6,8 +6,8 @@ import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import ru.musify.musicservice.model.entity.Song;
-import ru.musify.musicservice.model.entity.User;
+import ru.musify.musicservice.entity.Song;
+import ru.musify.musicservice.entity.User;
 
 public interface UserRepository extends JpaRepository<User, UUID> {
 

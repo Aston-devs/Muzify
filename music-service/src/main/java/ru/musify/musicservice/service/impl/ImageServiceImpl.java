@@ -2,33 +2,29 @@ package ru.musify.musicservice.service.impl;
 
 import java.util.List;
 import java.util.UUID;
+
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.musify.musicservice.handler.exception.EntityNotFoundException;
-import ru.musify.musicservice.model.dto.ImageDto;
-import ru.musify.musicservice.model.entity.Image;
+import ru.musify.musicservice.dto.ImageDto;
+import ru.musify.musicservice.entity.Image;
 import ru.musify.musicservice.repository.ImageRepository;
 import ru.musify.musicservice.service.ImageService;
 import ru.musify.musicservice.util.mapper.ImageMapper;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ImageServiceImpl implements ImageService {
 
   private final ImageRepository repository;
 
   private final ImageMapper imageMapper;
 
-  @Autowired
-  public ImageServiceImpl(ImageRepository repository, ImageMapper imageMapper) {
-    this.repository = repository;
-    this.imageMapper = imageMapper;
-  }
-
   @Override
-  @Transactional(readOnly = true)
   public ImageDto findById(UUID id) {
     Image image = repository.findById(id)
         .orElseThrow(() -> {
@@ -41,7 +37,6 @@ public class ImageServiceImpl implements ImageService {
   }
 
   @Override
-  @Transactional(readOnly = true)
   public List<ImageDto> findAll() {
     List<Image> allImages = repository.findAll();
     log.info("Found all images");
