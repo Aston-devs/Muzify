@@ -36,7 +36,9 @@ class UploadControllerTest {
         SongRequest request = new SongRequest("title", "author");
         MultipartFile audioMockFile = new MockMultipartFile("audio", "foo.mp3".getBytes());
         MultipartFile imgMockFile = new MockMultipartFile("audio", "foo.mp3".getBytes());
-        SongMetainfo metainfo = new SongMetainfo(request.title(), request.author());
+        SongMetainfo metainfo = new SongMetainfo();
+        metainfo.setAuthor(request.author());
+        metainfo.setTitle(request.title());
         when(mapper.toMetainfo(request)).thenReturn(metainfo);
 
         CompletableFuture<ResponseEntity<String>> result = controller.uploadFile(request, audioMockFile, imgMockFile);
