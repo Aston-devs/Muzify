@@ -1,5 +1,6 @@
 package ru.musify.playerservice.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,16 +25,12 @@ import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class S3ServiceImpl implements S3Service {
 
     @Value("${s3.bucketName}")
     private String bucketName;
     private final S3Client s3Client;
-
-    @Autowired
-    public S3ServiceImpl(S3Client s3Client) {
-        this.s3Client = s3Client;
-    }
 
     @Override
     public void uploadFile(MultipartFile file, String objectKey) {
