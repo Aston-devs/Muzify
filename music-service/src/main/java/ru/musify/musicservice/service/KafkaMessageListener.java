@@ -1,28 +1,31 @@
 package ru.musify.musicservice.service;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+import ru.musify.musicservice.model.dto.SongMetainfo;
+
+import java.time.LocalDateTime;
 
 
 @Component
 public class KafkaMessageListener {
-    @KafkaListener(topics = "topicMS", groupId = "my_group_id")
-    public void listen(ConsumerRecord<String, String> record) {
-        System.out.println("Received Message: " + record.value());
+    @KafkaListener(topics = "topic-upload", groupId = "my_group_id")
+    public void listen(ConsumerRecord<String, SongMetainfo> record) {
+        SongMetainfo song = record.value();
+        System.out.println(
+                "Received Message: " + song.getTitle() +
+                " by " + song.getAuthor() +
+                " " + LocalDateTime.now());
     }
 }
 
-
-//    private static final Logger LOGGER = LoggerFactory.getLogger(KafkaConsumerService.class);
+//    private static final Logger LOGGER = LoggerFactory.getLogger(KafkaConsumerConfig.class);
 //
-//    @KafkaListener(topics = "music-upload")
-//    public void consume(ConsumerRecord<String, Object> record) {
+//    @KafkaListener(topics = "topicMS", groupId = "my_group_id")
+//    public void listen(ConsumerRecord<String, Object> record) {
 //        LOGGER.info("Received message: key={}, value={}", record.key(), record.value());
 //
 //    }
-
+//}
 
