@@ -25,6 +25,7 @@ public class UploadController {
                                                                 @RequestParam("image") MultipartFile image,
                                                                 @RequestParam("audio") MultipartFile audio) {
         SongMetainfo metainfo = mapper.toMetainfo(request);
+        metainfo.setUrls();
         return CompletableFuture.supplyAsync(() -> {
             producerService.sendSongMetainfoToTopic(metainfo);
             s3Service.uploadFile(audio, metainfo.getAudioUrl());

@@ -26,4 +26,4 @@ spring:
   kafka:
     bootstrap-servers: localhost:9092
     consumer:
-      group-id: group_id
+      group-id: muzify-song
