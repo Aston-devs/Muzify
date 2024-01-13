@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import ru.musify.musicservice.model.entity.Author;
+import ru.musify.musicservice.entity.Author;
 
 @Repository
 public interface AuthorRepository extends JpaRepository<Author, UUID> {

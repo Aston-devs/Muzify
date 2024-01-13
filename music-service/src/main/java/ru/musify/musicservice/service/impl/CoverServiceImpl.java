@@ -2,33 +2,29 @@ package ru.musify.musicservice.service.impl;
 
 import java.util.List;
 import java.util.UUID;
+
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.musify.musicservice.handler.exception.EntityNotFoundException;
-import ru.musify.musicservice.model.dto.CoverDto;
-import ru.musify.musicservice.model.entity.Cover;
+import ru.musify.musicservice.dto.CoverDto;
+import ru.musify.musicservice.entity.Cover;
 import ru.musify.musicservice.repository.CoverRepository;
 import ru.musify.musicservice.service.CoverService;
 import ru.musify.musicservice.util.mapper.CoverMapper;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CoverServiceImpl implements CoverService {
 
   private final CoverRepository repository;
 
   private final CoverMapper coverMapper;
 
-  @Autowired
-  public CoverServiceImpl(CoverRepository repository, CoverMapper coverMapper) {
-    this.repository = repository;
-    this.coverMapper = coverMapper;
-  }
-
   @Override
-  @Transactional(readOnly = true)
   public CoverDto findById(UUID id) {
     Cover cover = repository.findById(id)
         .orElseThrow(() -> {
@@ -41,7 +37,6 @@ public class CoverServiceImpl implements CoverService {
   }
 
   @Override
-  @Transactional(readOnly = true)
   public List<CoverDto> findAll() {
     List<Cover> allCovers = repository.findAll();
     log.info("Found all covers");

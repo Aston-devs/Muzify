@@ -4,8 +4,8 @@ import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 import static org.mapstruct.ReportingPolicy.IGNORE;
 
 import org.mapstruct.Mapper;
-import ru.musify.musicservice.model.dto.CoverDto;
-import ru.musify.musicservice.model.entity.Cover;
+import ru.musify.musicservice.dto.CoverDto;
+import ru.musify.musicservice.entity.Cover;
 
 @Mapper(componentModel = SPRING, unmappedTargetPolicy = IGNORE)
 public interface CoverMapper {

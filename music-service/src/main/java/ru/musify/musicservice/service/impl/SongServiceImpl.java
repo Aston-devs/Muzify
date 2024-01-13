@@ -2,36 +2,32 @@ package ru.musify.musicservice.service.impl;
 
 import java.util.List;
 import java.util.UUID;
+
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.musify.musicservice.handler.exception.EntityNotFoundException;
-import ru.musify.musicservice.model.dto.SongDto;
-import ru.musify.musicservice.model.entity.Song;
+import ru.musify.musicservice.dto.SongDto;
+import ru.musify.musicservice.entity.Song;
 import ru.musify.musicservice.repository.SongRepository;
 import ru.musify.musicservice.service.SongService;
 import ru.musify.musicservice.util.mapper.SongMapper;
 
-@Service
 @Slf4j
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class SongServiceImpl implements SongService {
 
   private final SongRepository repository;
 
   private final SongMapper songMapper;
 
-  @Autowired
-  public SongServiceImpl(SongRepository repository, SongMapper songMapper) {
-    this.repository = repository;
-    this.songMapper = songMapper;
-  }
-
   @Override
-  @Transactional(readOnly = true)
   public SongDto findById(UUID id) {
     Song song = repository.findById(id)
         .orElseThrow(() -> {
@@ -44,7 +40,6 @@ public class SongServiceImpl implements SongService {
   }
 
   @Override
-  @Transactional(readOnly = true)
   public List<SongDto> findAll() {
     List<Song> allSongs = repository.findAll();
     log.info("Found all songs");
@@ -55,7 +50,6 @@ public class SongServiceImpl implements SongService {
   }
 
   @Override
-  @Transactional(readOnly = true)
   public List<SongDto> findPaginatedSongs(int page, int size) {
     Pageable pageable = PageRequest.of(page, size);
     Page<Song> paginatedSongs = repository.findAll(pageable);

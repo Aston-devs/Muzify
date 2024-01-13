@@ -1,4 +1,4 @@
-package ru.musify.musicservice.model.dto;
+package ru.musify.musicservice.dto;
 
 import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -7,7 +7,7 @@ import lombok.Builder;
 import org.hibernate.validator.constraints.URL;
 
 @Builder
-public record CoverDto(@NotNull UUID id,
+public record ImageDto(@NotNull UUID id,
                        @URL String url) implements Serializable {
 
 }

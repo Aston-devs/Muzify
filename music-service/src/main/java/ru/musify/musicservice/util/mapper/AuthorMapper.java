@@ -4,8 +4,8 @@ import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 import static org.mapstruct.ReportingPolicy.IGNORE;
 
 import org.mapstruct.Mapper;
-import ru.musify.musicservice.model.dto.AuthorDto;
-import ru.musify.musicservice.model.entity.Author;
+import ru.musify.musicservice.dto.AuthorDto;
+import ru.musify.musicservice.entity.Author;
 
 @Mapper(componentModel = SPRING, uses = ImageMapper.class, unmappedTargetPolicy = IGNORE)
 public interface AuthorMapper {

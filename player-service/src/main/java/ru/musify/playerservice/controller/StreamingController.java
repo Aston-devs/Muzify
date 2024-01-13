@@ -14,10 +14,10 @@ import ru.musify.playerservice.service.impl.S3ServiceImpl;
 public class StreamingController {
     private final S3ServiceImpl s3Service;
 
-    @GetMapping(value = "/play/{objectKey}", produces = "audio/mp3")
-    public Mono<Resource> playMusic(@PathVariable String objectKey,
+    @GetMapping(value = "/play/{audioUrl}", produces = "audio/mp3")
+    public Mono<Resource> playMusic(@PathVariable String audioUrl,
                                     @RequestHeader String range) {
         log.info("range is bytes : {}", range);
-        return s3Service.getFile(objectKey);
+        return s3Service.getFile(audioUrl);
     }
 }

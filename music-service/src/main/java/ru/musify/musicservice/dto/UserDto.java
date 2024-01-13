@@ -1,4 +1,4 @@
-package ru.musify.musicservice.model.dto;
+package ru.musify.musicservice.dto;
 
 import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;

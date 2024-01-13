@@ -1,4 +1,4 @@
-package ru.musify.musicservice.model.dto;
+package ru.musify.musicservice.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.UUID;
 import lombok.Builder;
-import ru.musify.musicservice.model.entity.Genre;
+import ru.musify.musicservice.entity.Genre;
 
 @Builder
 public record AuthorDto(@NotNull UUID id,
