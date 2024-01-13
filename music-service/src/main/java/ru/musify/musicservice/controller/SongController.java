@@ -58,6 +58,7 @@ public class SongController {
     String coverUrl = newSongDto.coverUrl();
     String authorName = newSongDto.author();
 
+
     if (isNotBlank(coverUrl)) {
       song.setCover(new Cover(coverUrl));
     }

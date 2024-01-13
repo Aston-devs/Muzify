@@ -23,3 +23,7 @@ spring:
     password: music_password
     locations: classpath:db/migration
     schemas: music_service
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: muzify-song
