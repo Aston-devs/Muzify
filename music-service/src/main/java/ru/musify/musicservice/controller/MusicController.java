@@ -4,10 +4,10 @@ import static jakarta.servlet.http.HttpServletResponse.SC_OK;
 
 import java.util.List;
 import java.util.UUID;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -16,12 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.musify.musicservice.handler.ResponseData;
-import ru.musify.musicservice.handler.exception.UserNotExistException;
 import ru.musify.musicservice.dto.SongDto;
 import ru.musify.musicservice.dto.UserDto;
 import ru.musify.musicservice.dto.UserSongsDto;
 import ru.musify.musicservice.entity.User;
+import ru.musify.musicservice.handler.ResponseData;
+import ru.musify.musicservice.handler.exception.SongAlreadyAddedException;
+import ru.musify.musicservice.handler.exception.UserNotExistException;
 import ru.musify.musicservice.service.SongService;
 import ru.musify.musicservice.service.UserService;
 import ru.musify.musicservice.util.mapper.UserMapper;
@@ -39,15 +40,15 @@ public class MusicController {
   private final UserMapper userMapper;
 
   @GetMapping
-  @ResponseStatus(code = HttpStatus.OK)
+  @ResponseStatus(HttpStatus.OK)
   public List<SongDto> getAllSongs(
       @RequestParam(name = "page", required = false, defaultValue = "0") int page,
       @RequestParam(name = "size", required = false, defaultValue = "20") int size) {
     return songService.findPaginatedSongs(page, size);
   }
 
-  @GetMapping("/{userId}")
-  @ResponseStatus(code = HttpStatus.OK)
+  @GetMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
   public UserSongsDto getUserSongs(@PathVariable UUID userId) {
     isUserExists(userId);
 
@@ -61,15 +62,20 @@ public class MusicController {
     return userSongsDto;
   }
 
-  @PatchMapping("/{userId}")
-  @ResponseStatus(code = HttpStatus.CREATED)
+  @PatchMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.CREATED)
   public SongDto addSongToUser(@PathVariable UUID userId,
       @RequestParam(name = "trackId") UUID songId) {
     isUserExists(userId);
 
     SongDto songDto = songService.findById(songId);
-
     UserDto userDto = userService.findById(userId);
+
+    if (userDto.userSongs().contains(songDto)) {
+      throw new SongAlreadyAddedException(
+          "User [" + userDto.id() + "] already added song [" + songDto.id() + "]");
+    }
+
     userDto.userSongs().add(songDto);
     User user = userMapper.toEntity(userDto);
 
@@ -79,8 +85,8 @@ public class MusicController {
     return songDto;
   }
 
-  @DeleteMapping("/{userId}")
-  @ResponseStatus(code = HttpStatus.OK)
+  @DeleteMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.OK)
   public ResponseData removeSongFromUser(@PathVariable UUID userId,
       @RequestParam(name = "trackId") UUID songId) {
     isUserExists(userId);

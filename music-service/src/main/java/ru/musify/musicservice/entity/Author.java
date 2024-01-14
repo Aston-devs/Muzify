@@ -5,23 +5,39 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import java.util.Objects;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+@Builder
 @Getter
 @Setter
 @Entity
 @Table(name = "author", schema = "music_service")
 public class Author extends BaseEntity {
 
+  @ToString.Include
+  @EqualsAndHashCode.Include
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private UUID id;
+
+  @ToString.Include
   @Column(name = "name", nullable = false, unique = true, length = 100)
   private String name;
 
@@ -33,21 +49,4 @@ public class Author extends BaseEntity {
   @JoinColumn(name = "photo_id", unique = true)
   private Image photo;
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (!(o instanceof Author author)) {
-      return false;
-    }
-    return Objects.equals(getId(), author.getId()) && Objects.equals(name, author.name)
-        && genre == author.genre
-        && Objects.equals(photo, author.photo);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(getId(), name, genre, photo);
-  }
 }

@@ -6,7 +6,6 @@ EXTENSION "uuid-ossp";
 CREATE TABLE cover
 (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-    song_id UUID UNIQUE,
     url        VARCHAR(255) NOT NULL,
     created_at TIMESTAMP WITHOUT TIME ZONE,
     updated_at TIMESTAMP WITHOUT TIME ZONE
@@ -23,8 +22,8 @@ CREATE TABLE image
 CREATE TABLE author
 (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-    photo_id UUID UNIQUE,
     name       VARCHAR(100) NOT NULL UNIQUE,
+    photo_id UUID UNIQUE,
     genre      VARCHAR,
     created_at TIMESTAMP WITHOUT TIME ZONE,
     updated_at TIMESTAMP WITHOUT TIME ZONE,
@@ -35,10 +34,8 @@ CREATE TABLE song
 (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     title        VARCHAR(150) NOT NULL,
-    duration     TIME,
     genre        VARCHAR(100),
     release_date TIMESTAMP WITHOUT TIME ZONE,
-    album        VARCHAR(150),
     author_id UUID,
     cover_id UUID UNIQUE,
     url          VARCHAR      NOT NULL,
@@ -50,7 +47,9 @@ CREATE TABLE song
 
 CREATE TABLE app_user
 (
-    id UUID PRIMARY KEY
+    id UUID PRIMARY KEY,
+    created_at TIMESTAMP WITHOUT TIME ZONE,
+    updated_at TIMESTAMP WITHOUT TIME ZONE
 );
 
 CREATE TABLE user_songs

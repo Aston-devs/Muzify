@@ -6,4 +6,5 @@ import lombok.Builder;
 
 @Builder
 public record UserSongsDto(@NotNull List<SongDto> songs) {
+
 }

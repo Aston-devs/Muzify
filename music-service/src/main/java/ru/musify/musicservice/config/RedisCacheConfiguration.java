@@ -1,5 +1,6 @@
 package ru.musify.musicservice.config;
 
+import java.time.Duration;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -10,8 +11,6 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 
-import java.time.Duration;
-
 /**
  * Redis caching configuration.
  */
@@ -20,28 +19,28 @@ import java.time.Duration;
 public class RedisCacheConfiguration {
 
 
-    /**
-     * Creates a Redis cache manager.
-     *
-     * @param connectionFactory factory for connecting to Redis
-     * @return Redis cache manager
-     */
-    @Bean
-    public CacheManager redisCacheManager(RedisConnectionFactory connectionFactory) {
+  /**
+   * Creates a Redis cache manager.
+   *
+   * @param connectionFactory factory for connecting to Redis
+   * @return Redis cache manager
+   */
+  @Bean
+  public CacheManager redisCacheManager(RedisConnectionFactory connectionFactory) {
 
-        RedisCacheWriter cacheWriter = RedisCacheWriter.nonLockingRedisCacheWriter(connectionFactory);
+    RedisCacheWriter cacheWriter = RedisCacheWriter.nonLockingRedisCacheWriter(connectionFactory);
 
-        org.springframework.data.redis.cache.RedisCacheConfiguration configuration = org.springframework.data.redis.cache.RedisCacheConfiguration
-                .defaultCacheConfig()
-                .entryTtl(Duration.ofMinutes(10))
-                .serializeValuesWith(
-                        RedisSerializationContext
-                        .SerializationPair
-                        .fromSerializer(new GenericJackson2JsonRedisSerializer())
-                );
+    org.springframework.data.redis.cache.RedisCacheConfiguration configuration = org.springframework.data.redis.cache.RedisCacheConfiguration
+        .defaultCacheConfig()
+        .entryTtl(Duration.ofMinutes(30))
+        .serializeValuesWith(
+            RedisSerializationContext
+                .SerializationPair
+                .fromSerializer(new GenericJackson2JsonRedisSerializer())
+        );
 
-        return RedisCacheManager.builder(cacheWriter)
-                .cacheDefaults(configuration)
-                .build();
-    }
+    return RedisCacheManager.builder(cacheWriter)
+        .cacheDefaults(configuration)
+        .build();
+  }
 }

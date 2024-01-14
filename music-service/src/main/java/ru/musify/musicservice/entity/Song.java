@@ -5,27 +5,41 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import java.sql.Time;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+@Builder
 @Getter
 @Setter
 @Entity
 @Table(name = "song", schema = "music_service")
 public class Song extends BaseEntity {
+
+  @ToString.Include
+  @EqualsAndHashCode.Include
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private UUID id;
 
   @Column(name = "title", nullable = false, length = 150)
   private String title;
@@ -38,15 +52,9 @@ public class Song extends BaseEntity {
   @JoinColumn(name = "cover_id", unique = true)
   private Cover cover;
 
-  @Column(name = "duration", columnDefinition = "TIME")
-  private Time duration;
-
   @Column(name = "genre")
   @Enumerated(EnumType.STRING)
   private Genre genre;
-
-  @Column(name = "album", length = 150)
-  private String album;
 
   @Column(name = "url", nullable = false)
   private String url;
@@ -57,24 +65,4 @@ public class Song extends BaseEntity {
   @ManyToMany(mappedBy = "userSongs")
   private List<User> users;
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (!(o instanceof Song song)) {
-      return false;
-    }
-    return Objects.equals(getId(), ((Song) o).getId()) && Objects.equals(title, song.title)
-        && Objects.equals(author,
-        song.author) && Objects.equals(cover, song.cover) && Objects.equals(
-        duration, song.duration) && genre == song.genre && Objects.equals(album, song.album)
-        && Objects.equals(url, song.url) && Objects.equals(releaseDate,
-        song.releaseDate);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(title, author, cover, duration, genre, album, url, releaseDate, getId());
-  }
 }
