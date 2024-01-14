@@ -13,6 +13,7 @@ import static org.mockito.Mockito.when;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -60,7 +61,8 @@ class SongServiceImplTest {
   }
 
   @Test
-  void testFindById_ExistingSong_ReturnsSongDto() {
+  @DisplayName("Test find by id with existing song must returns song DTO")
+  void findByIdTestWithExistingSong() {
     when(songRepository.findById(songId)).thenReturn(Optional.ofNullable(song));
     when(songMapper.toDto(song)).thenReturn(expectedSongDto);
 
@@ -73,7 +75,8 @@ class SongServiceImplTest {
   }
 
   @Test
-  void testFindById_NonExistingSong_ThrowsEntityNotFoundException() {
+  @DisplayName("Test find by id non existing song must throws EntityNotFoundException")
+  void findByIdTestWithNonExistingSong() {
     when(songRepository.findById(songId)).thenReturn(Optional.empty());
 
     assertThrows(EntityNotFoundException.class, () ->
@@ -85,7 +88,8 @@ class SongServiceImplTest {
   }
 
   @Test
-  void testSave_ValidSong_ReturnsSavedSongDto() {
+  @DisplayName("Test save valid song must returns saved song DTO")
+  void saveValidSongTest() {
     when(songRepository.save(song)).thenReturn(song);
     when(songMapper.toDto(song)).thenReturn(expectedSongDto);
 
@@ -98,7 +102,8 @@ class SongServiceImplTest {
   }
 
   @Test
-  void testUpdate_ValidSong_ReturnsUpdatedSongDto() {
+  @DisplayName("Test update valid song must returns updated song DTO")
+  void updateValidSongTest() {
     when(songRepository.save(song)).thenReturn(song);
     when(songMapper.toDto(song)).thenReturn(expectedSongDto);
 
@@ -111,7 +116,8 @@ class SongServiceImplTest {
   }
 
   @Test
-  void testRemoveById_ValidId_RemovesSongFromRepository() {
+  @DisplayName("Test remove song by id with valid id")
+  void removeSongByValidId() {
     songService.removeById(songId);
 
     verify(songRepository, times(1)).deleteById(songId);

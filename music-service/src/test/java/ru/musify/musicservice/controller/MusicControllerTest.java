@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,6 +94,7 @@ class MusicControllerTest {
   }
 
   @Test
+  @DisplayName("Test get user songs must return correct list of songs of user and status OK")
   void getUsersSongsTest() throws Exception {
     List<SongDto> mockUserSongs = new ArrayList<>(songsDto);
     when(userService.isUserExists(userId)).thenReturn(true);
@@ -110,6 +112,7 @@ class MusicControllerTest {
   }
 
   @Test
+  @DisplayName("Test add song to user must return status isCreated and content type JSON")
   void addSongToUserTest() throws Exception {
     when(userService.isUserExists(userId)).thenReturn(true);
     when(songService.findById(songId)).thenReturn(songDto);
@@ -125,6 +128,7 @@ class MusicControllerTest {
   }
 
   @Test
+  @DisplayName("Test remove song from user must return status OK and message that song is removed")
   void removeSongFromUserTest() throws Exception {
     userDto.userSongs().add(songDto);
     when(userService.isUserExists(userId)).thenReturn(true);
