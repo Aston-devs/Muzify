@@ -2,19 +2,20 @@ package ru.musify.musicservice.service.impl;
 
 import java.util.List;
 import java.util.UUID;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.musify.musicservice.handler.exception.EntityNotFoundException;
+import ru.musify.musicservice.aop.Loggable;
 import ru.musify.musicservice.dto.ImageDto;
 import ru.musify.musicservice.entity.Image;
+import ru.musify.musicservice.handler.exception.EntityNotFoundException;
 import ru.musify.musicservice.repository.ImageRepository;
 import ru.musify.musicservice.service.ImageService;
 import ru.musify.musicservice.util.mapper.ImageMapper;
 
 @Slf4j
+@Loggable
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)

@@ -17,6 +17,10 @@ spring:
     username: music_admin
     password: music_password
     url: jdbc:postgresql://localhost:54321/music_db
+  jpa:
+    properties:
+      hibernate:
+        default_schema: music_service
   flyway:
     url: jdbc:postgresql://localhost:54321/music_db
     user: music_admin

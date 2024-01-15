@@ -13,6 +13,8 @@ dependencies {
 
     compileOnly("org.jetbrains:annotations:16.0.2")
     annotationProcessor("org.jetbrains:annotations:16.0.2")
+    compileOnly("org.projectlombok:lombok:1.18.20")
+    annotationProcessor("org.projectlombok:lombok:1.18.20")
 }
 
 openApiGenerate {
