@@ -1,6 +1,13 @@
 .bar-container {
-  margin: 2rem 34.5rem;
+  margin: 2rem 48rem;
   display: inline-flex;
+  align-items: center;
+  gap: 6.42794rem;
+}
+
+.playlist-container {
+  margin: 2rem 34.5rem;
+  display: inline-flexbox;
   align-items: center;
   gap: 6.42794rem;
 }
