@@ -45,13 +45,13 @@ class S3ServiceTest {
 
     @Test
     @DisplayName("upload file when was successful")
-    void test_uploadFile_when_success() throws IOException {
+    void testUploadFileWhenSuccess() throws IOException {
         assertDoesNotThrow(() -> s3Service.uploadFile(file, objectKey));
     }
 
     @Test
     @DisplayName("get file from S3 storage")
-    void test_GetFile() {
+    void testGetFile() {
         GetObjectRequest getObjectRequest = GetObjectRequest.builder().key(objectKey).build();
         GetObjectResponse getObjectResponse = GetObjectResponse.builder().build();
         ResponseBytes<GetObjectResponse> responseBytes = ResponseBytes
