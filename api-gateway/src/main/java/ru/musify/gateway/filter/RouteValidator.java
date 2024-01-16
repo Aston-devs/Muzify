@@ -9,7 +9,6 @@ import java.util.function.Predicate;
 public class RouteValidator {
     public static final List<String> openApiEndpoints = List.of(
             "/api/v1/musify/auth/signup",
-            "/api/v1/musify/auth/token",
             "/eureka"
     );
 
