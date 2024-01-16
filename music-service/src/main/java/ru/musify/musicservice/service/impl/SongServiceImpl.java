@@ -32,7 +32,7 @@ public class SongServiceImpl implements SongService {
   private final SongMapper songMapper;
 
   @Override
-  @Cacheable(value = "song", key = "#id", condition = "#result != null")
+//  @Cacheable(value = "song", key = "#id", condition = "#result != null")
   public SongDto findById(UUID id) {
     Song song = repository.findById(id)
         .orElseThrow(() -> {
@@ -55,7 +55,7 @@ public class SongServiceImpl implements SongService {
   }
 
   @Override
-  @Cacheable(value = "songsCache")
+//  @Cacheable(value = "songsCache")
   public List<SongDto> findPaginatedSongs(int page, int size) {
     Pageable pageable = PageRequest.of(page, size);
     Page<Song> paginatedSongs = repository.findAll(pageable);
@@ -77,7 +77,7 @@ public class SongServiceImpl implements SongService {
 
   @Override
   @Transactional
-  @CachePut(value = "song", key = "#song.id")
+//  @CachePut(value = "song", key = "#song.id")
   public SongDto update(Song song) {
     Song updatedSong = repository.save(song);
     log.info("Song updated with id {}", updatedSong.getId());
@@ -87,7 +87,7 @@ public class SongServiceImpl implements SongService {
 
   @Override
   @Transactional
-  @CacheEvict(value = "song", key = "#id")
+//  @CacheEvict(value = "song", key = "#id")
   public void removeById(UUID id) {
     repository.deleteById(id);
 
