@@ -9,6 +9,9 @@ eureka:
     hostname: localhost
 
 spring:
+  main:
+    allow-bean-definition-overriding: true
+    web-application-type: reactive
   application:
     name: api-gateway
   profiles:
@@ -20,26 +23,25 @@ spring:
       discovery:
         locator:
           enabled: true
-          lower-case-service-id: true
-      filters:
-        - TokenRelay=
-  security:
-    oauth2:
-      client:
-        provider:
-          keycloak:
-            issuer-uri: http://localhost:8080/realms/muzify-gateway
-        registration:
-          keycloak:
-            provider: keycloak
-            client-id: muzify-gateway-client
-            client-secret: lN88DuqYtwM7cfT0XeO3txXEjYcTuwxe
-            authorization-grant-type: authorization_code
-            scope: openid
+          lower-case-service-is: true
+      routes:
+        - id: player-service
+          uri: lb://player-service
+          predicates:
+            - Path=/api/v1/player/**
+          filters:
+            - AuthenticationFilter
 
+        - id: music-service
+          uri: lb://music-service
+          predicates:
+            - Path=/api/v1/musify/audios/**
+          filters:
+            - AuthenticationFilter
+
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/v1/musify/auth/**
 server:
   port: 8081
-
-muzify:
-  url:
-    logout: http://localhost:8080
