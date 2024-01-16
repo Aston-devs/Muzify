@@ -15,3 +15,42 @@ eureka:
   instance:
     prefer-ip-address: true
     hostname: localhost
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+    web-application-type: reactive
+  application:
+    name: api-gateway
+  profiles:
+    active: dev
+  config:
+    import: configserver:http://localhost:8888
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-is: true
+      routes:
+        - id: player-service
+          uri: lb://player-service
+          predicates:
+            - Path=/api/v1/player/**
+          filters:
+            - AuthenticationFilter
+
+        - id: music-service
+          uri: lb://music-service
+          predicates:
+            - Path=/api/v1/musify/audios/**
+          filters:
+            - AuthenticationFilter
+
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/v1/musify/auth/**
+
+jwt:
+  secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
