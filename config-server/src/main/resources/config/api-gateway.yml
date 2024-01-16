@@ -22,10 +22,6 @@ spring:
     web-application-type: reactive
   application:
     name: api-gateway
-  profiles:
-    active: dev
-  config:
-    import: configserver:http://localhost:8888
   cloud:
     gateway:
       discovery:
