@@ -15,7 +15,7 @@ public class JWTUtil {
 
 
     @Value("${jwt.secret}")
-    public static String SECRET;
+    public static String secret;
 
 
     public void validateToken(final String token) {
@@ -24,19 +24,19 @@ public class JWTUtil {
 
 
     private Key getSignKey() {
-        byte[] key = Decoders.BASE64.decode(SECRET);
+        byte[] key = Decoders.BASE64.decode(secret);
         return Keys.hmacShaKeyFor(key);
     }
 
-    public String extructUsernameID(String token){
+    public String extructUsernameID(String token) {
         return extractClaim(token, Claims::getId);
     }
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver){
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claim = extractAllClaims(token);
         return claimsResolver.apply(claim);
     }
 
-    private Claims extractAllClaims(String token){
+    private Claims extractAllClaims(String token) {
         return Jwts
                 .parserBuilder()
                 .setSigningKey(getSignKey())

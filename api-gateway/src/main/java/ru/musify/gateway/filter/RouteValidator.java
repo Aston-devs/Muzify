@@ -7,13 +7,13 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class RouteValidator {
-    public static final List<String> openApiEndpoints = List.of(
+    public static final List<String> OPEN_API_ENDPOINTS = List.of(
             "/api/v1/musify/auth/signup",
             "/eureka"
     );
 
     public Predicate<ServerHttpRequest> isSecured =
-            request -> openApiEndpoints
+            request -> OPEN_API_ENDPOINTS
                     .stream()
                     .noneMatch(uri -> request.getURI().getPath().contains(uri));
 
