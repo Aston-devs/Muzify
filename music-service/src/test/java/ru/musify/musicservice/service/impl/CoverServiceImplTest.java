@@ -1,5 +1,6 @@
 package ru.musify.musicservice.service.impl;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -12,7 +13,6 @@ import ru.musify.musicservice.entity.Cover;
 import ru.musify.musicservice.repository.CoverRepository;
 import ru.musify.musicservice.util.mapper.CoverMapper;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +27,10 @@ import static org.mockito.Mockito.when;
 @ContextConfiguration(classes = {CoverServiceImpl.class})
 @ExtendWith(SpringExtension.class)
 class CoverServiceImplTest {
+
+    private Cover expCover;
+    private CoverDto expCoverDto;
+
     @MockBean
     private CoverMapper coverMapper;
 
@@ -36,24 +40,32 @@ class CoverServiceImplTest {
     @Autowired
     private CoverServiceImpl coverServiceImpl;
 
+    @BeforeEach
+    void setUp() {
+
+        expCover = Cover.builder()
+                .id(UUID.randomUUID())
+                .url("https://example.org/cover")
+                .build();
+
+        expCoverDto = CoverDto.builder()
+                .url("https://example.org/cover")
+                .build();
+    }
+
     @Test
     void testFindById() {
 
-        Cover cover = new Cover();
-        cover.setCreatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-        cover.setId(UUID.randomUUID());
-        cover.setUpdatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-        cover.setUrl("https://example.org/example");
-        Optional<Cover> ofResult = Optional.of(cover);
+        Optional<Cover> ofResult = Optional.of(expCover);
+
         when(coverRepository.findById(Mockito.any())).thenReturn(ofResult);
-        CoverDto coverDto = new CoverDto("https://example.org/example");
-        when(coverMapper.toDto(Mockito.any())).thenReturn(coverDto);
+        when(coverMapper.toDto(Mockito.any())).thenReturn(expCoverDto);
 
         CoverDto actualFindByIdResult = coverServiceImpl.findById(UUID.randomUUID());
 
         verify(coverRepository).findById(Mockito.any());
         verify(coverMapper).toDto(Mockito.any());
-        assertSame(coverDto, actualFindByIdResult);
+        assertSame(expCoverDto, actualFindByIdResult);
     }
 
     @Test
@@ -70,51 +82,14 @@ class CoverServiceImplTest {
     @Test
     void testSave() {
 
-        Cover cover = new Cover();
-        cover.setCreatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-        cover.setId(UUID.randomUUID());
-        cover.setUpdatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-        cover.setUrl("https://example.org/example");
-        when(coverRepository.save(Mockito.any())).thenReturn(cover);
-        CoverDto coverDto = new CoverDto("https://example.org/example");
-        when(coverMapper.toDto(Mockito.any())).thenReturn(coverDto);
+        when(coverRepository.save(Mockito.any())).thenReturn(expCover);
+        when(coverMapper.toDto(Mockito.any())).thenReturn(expCoverDto);
 
-        Cover cover2 = new Cover();
-        cover2.setCreatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-        cover2.setId(UUID.randomUUID());
-        cover2.setUpdatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-        cover2.setUrl("https://example.org/example");
-
-        CoverDto actualSaveResult = coverServiceImpl.save(cover2);
+        CoverDto actualSaveResult = coverServiceImpl.save(expCover);
 
         verify(coverRepository).save(Mockito.any());
         verify(coverMapper).toDto(Mockito.any());
-        assertSame(coverDto, actualSaveResult);
-    }
-
-    @Test
-    void testUpdate() {
-
-        Cover cover = new Cover();
-        cover.setCreatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-        cover.setId(UUID.randomUUID());
-        cover.setUpdatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-        cover.setUrl("https://example.org/example");
-        when(coverRepository.save(Mockito.any())).thenReturn(cover);
-        CoverDto coverDto = new CoverDto("https://example.org/example");
-        when(coverMapper.toDto(Mockito.any())).thenReturn(coverDto);
-
-        Cover cover2 = new Cover();
-        cover2.setCreatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-        cover2.setId(UUID.randomUUID());
-        cover2.setUpdatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-        cover2.setUrl("https://example.org/example");
-
-        CoverDto actualUpdateResult = coverServiceImpl.update(cover2);
-
-        verify(coverRepository).save(Mockito.any());
-        verify(coverMapper).toDto(Mockito.any());
-        assertSame(coverDto, actualUpdateResult);
+        assertSame(expCoverDto, actualSaveResult);
     }
 
     @Test
@@ -125,5 +100,18 @@ class CoverServiceImplTest {
         coverServiceImpl.removeById(UUID.randomUUID());
 
         verify(coverRepository).deleteById(Mockito.any());
+    }
+
+    @Test
+    void testUpdate() {
+
+        when(coverRepository.save(Mockito.any())).thenReturn(expCover);
+        when(coverMapper.toDto(Mockito.any())).thenReturn(expCoverDto);
+
+        CoverDto actualUpdateResult = coverServiceImpl.update(expCover);
+
+        verify(coverRepository).save(Mockito.any());
+        verify(coverMapper).toDto(Mockito.any());
+        assertSame(expCoverDto, actualUpdateResult);
     }
 }

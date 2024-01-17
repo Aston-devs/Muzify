@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -36,6 +37,15 @@ import ru.musify.musicservice.util.mapper.SongMapper;
 @ContextConfiguration(classes = {SongServiceImpl.class})
 @ExtendWith(SpringExtension.class)
 class SongServiceImplTest {
+
+    private ImageDto expImageDto;
+    private Song expSong;
+    private Author expAuthor;
+    private Cover expCover;
+    private CoverDto expCoverDto;
+    private SongDto expSongDto;
+
+
     @MockBean
     private SongMapper songMapper;
 
@@ -45,57 +55,61 @@ class SongServiceImplTest {
     @Autowired
     private SongServiceImpl songServiceImpl;
 
+    @BeforeEach
+    void setup() {
+
+        expCover = new Cover();
+        expCover.setCreatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
+        expCover.setId(UUID.randomUUID());
+        expCover.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
+        expCover.setUrl("https://example.org/example");
+
+        expCoverDto = CoverDto.builder()
+                .url("https://example.org/example")
+                .build();
+
+        expSong = new Song();
+        expSong.setAuthor(expAuthor);
+        expSong.setCover(expCover);
+        expSong.setCreatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
+        expSong.setGenre(Genre.CLASSICAL);
+        expSong.setId(UUID.randomUUID());
+        expSong.setReleaseDate(LocalDate.of(2020, 1, 1).atStartOfDay());
+        expSong.setTitle("Dr");
+        expSong.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
+        expSong.setUrl("https://example.org/example");
+        expSong.setUsers(new ArrayList<>());
+
+        expSongDto = SongDto.builder()
+                .id(UUID.randomUUID())
+                .title("Dr")
+                .author(
+                        AuthorDto.builder()
+                                .id(UUID.randomUUID())
+                                .name("AuthorName")
+                                .genre(Genre.CLASSICAL)
+                                .photo(expImageDto)
+                                .build()
+                )
+                .cover(expCoverDto)
+                .url("https://example.org")
+                .build();
+
+
+    }
     @Test
     void testFindById() {
 
-        Image photo = new Image();
-        photo.setCreatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        photo.setId(UUID.randomUUID());
-        photo.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        photo.setUrl("https://example.org/example");
+        Optional<Song> ofResult = Optional.of(expSong);
 
-        Author author = new Author();
-        author.setCreatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        author.setGenre(Genre.CLASSICAL);
-        author.setId(UUID.randomUUID());
-        author.setName("Name");
-        author.setPhoto(photo);
-        author.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-
-        Cover cover = new Cover();
-        cover.setCreatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        cover.setId(UUID.randomUUID());
-        cover.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        cover.setUrl("https://example.org/example");
-
-        Song song = new Song();
-        song.setAuthor(author);
-        song.setCover(cover);
-        song.setCreatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        song.setGenre(Genre.CLASSICAL);
-        song.setId(UUID.randomUUID());
-        song.setReleaseDate(LocalDate.of(2020, 1, 1).atStartOfDay());
-        song.setTitle("Dr");
-        song.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        song.setUrl("https://example.org/example");
-        song.setUsers(new ArrayList<>());
-        Optional<Song> ofResult = Optional.of(song);
-        when(songRepository.findById(Mockito.<UUID>any())).thenReturn(ofResult);
-        UUID id = UUID.randomUUID();
-        UUID id2 = UUID.randomUUID();
-        AuthorDto author2 = new AuthorDto(id2, "Name", Genre.CLASSICAL,
-                new ImageDto(UUID.randomUUID(), "https://example.org/example"));
-
-        SongDto songDto = new SongDto(id, "Dr", author2, new CoverDto("https://example.org/example"),
-                "https://example.org/example");
-
-        when(songMapper.toDto(Mockito.<Song>any())).thenReturn(songDto);
+        when(songRepository.findById(Mockito.any())).thenReturn(ofResult);
+        when(songMapper.toDto(Mockito.any())).thenReturn(expSongDto);
 
         SongDto actualFindByIdResult = songServiceImpl.findById(UUID.randomUUID());
 
-        verify(songRepository).findById(Mockito.<UUID>any());
-        verify(songMapper).toDto(Mockito.<Song>any());
-        assertSame(songDto, actualFindByIdResult);
+        verify(songRepository).findById(Mockito.any());
+        verify(songMapper).toDto(Mockito.any());
+        assertSame(expSongDto, actualFindByIdResult);
     }
 
     @Test
@@ -123,178 +137,36 @@ class SongServiceImplTest {
     @Test
     void testSave() {
 
-        Image photo = new Image();
-        photo.setCreatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        photo.setId(UUID.randomUUID());
-        photo.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        photo.setUrl("https://example.org/example");
+        when(songRepository.save(Mockito.any())).thenReturn(expSong);
+        when(songMapper.toDto(Mockito.any())).thenReturn(expSongDto);
 
-        Author author = new Author();
-        author.setCreatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        author.setGenre(Genre.CLASSICAL);
-        author.setId(UUID.randomUUID());
-        author.setName("Name");
-        author.setPhoto(photo);
-        author.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
+        SongDto actualSaveResult = songServiceImpl.save(expSong);
 
-        Cover cover = new Cover();
-        cover.setCreatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        cover.setId(UUID.randomUUID());
-        cover.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        cover.setUrl("https://example.org/example");
-
-        Song song = new Song();
-        song.setAuthor(author);
-        song.setCover(cover);
-        song.setCreatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        song.setGenre(Genre.CLASSICAL);
-        song.setId(UUID.randomUUID());
-        song.setReleaseDate(LocalDate.of(2020, 1, 1).atStartOfDay());
-        song.setTitle("Dr");
-        song.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        song.setUrl("https://example.org/example");
-        song.setUsers(new ArrayList<>());
-        when(songRepository.save(Mockito.<Song>any())).thenReturn(song);
-        UUID id = UUID.randomUUID();
-        UUID id2 = UUID.randomUUID();
-        AuthorDto author2 = new AuthorDto(id2, "Name", Genre.CLASSICAL,
-                new ImageDto(UUID.randomUUID(), "https://example.org/example"));
-
-        SongDto songDto = new SongDto(id, "Dr", author2, new CoverDto("https://example.org/example"),
-                "https://example.org/example");
-
-        when(songMapper.toDto(Mockito.<Song>any())).thenReturn(songDto);
-
-        Image photo2 = new Image();
-        photo2.setCreatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        photo2.setId(UUID.randomUUID());
-        photo2.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        photo2.setUrl("https://example.org/example");
-
-        Author author3 = new Author();
-        author3.setCreatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        author3.setGenre(Genre.CLASSICAL);
-        author3.setId(UUID.randomUUID());
-        author3.setName("Name");
-        author3.setPhoto(photo2);
-        author3.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-
-        Cover cover2 = new Cover();
-        cover2.setCreatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        cover2.setId(UUID.randomUUID());
-        cover2.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        cover2.setUrl("https://example.org/example");
-
-        Song song2 = new Song();
-        song2.setAuthor(author3);
-        song2.setCover(cover2);
-        song2.setCreatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        song2.setGenre(Genre.CLASSICAL);
-        song2.setId(UUID.randomUUID());
-        song2.setReleaseDate(LocalDate.of(2020, 1, 1).atStartOfDay());
-        song2.setTitle("Dr");
-        song2.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        song2.setUrl("https://example.org/example");
-        song2.setUsers(new ArrayList<>());
-
-        SongDto actualSaveResult = songServiceImpl.save(song2);
-
-        verify(songRepository).save(Mockito.<Song>any());
-        verify(songMapper).toDto(Mockito.<Song>any());
-        assertSame(songDto, actualSaveResult);
+        verify(songRepository).save(Mockito.any());
+        verify(songMapper).toDto(Mockito.any());
+        assertSame(expSongDto, actualSaveResult);
     }
 
     @Test
     void testUpdate() {
 
-        Image photo = new Image();
-        photo.setCreatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        photo.setId(UUID.randomUUID());
-        photo.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        photo.setUrl("https://example.org/example");
+        when(songRepository.save(Mockito.any())).thenReturn(expSong);
+        when(songMapper.toDto(Mockito.any())).thenReturn(expSongDto);
 
-        Author author = new Author();
-        author.setCreatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        author.setGenre(Genre.CLASSICAL);
-        author.setId(UUID.randomUUID());
-        author.setName("Name");
-        author.setPhoto(photo);
-        author.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
+        SongDto actualUpdateResult = songServiceImpl.update(expSong);
 
-        Cover cover = new Cover();
-        cover.setCreatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        cover.setId(UUID.randomUUID());
-        cover.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        cover.setUrl("https://example.org/example");
-
-        Song song = new Song();
-        song.setAuthor(author);
-        song.setCover(cover);
-        song.setCreatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        song.setGenre(Genre.CLASSICAL);
-        song.setId(UUID.randomUUID());
-        song.setReleaseDate(LocalDate.of(2020, 1, 1).atStartOfDay());
-        song.setTitle("Dr");
-        song.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        song.setUrl("https://example.org/example");
-        song.setUsers(new ArrayList<>());
-        when(songRepository.save(Mockito.<Song>any())).thenReturn(song);
-        UUID id = UUID.randomUUID();
-        UUID id2 = UUID.randomUUID();
-        AuthorDto author2 = new AuthorDto(id2, "Name", Genre.CLASSICAL,
-                new ImageDto(UUID.randomUUID(), "https://example.org/example"));
-
-        SongDto songDto = new SongDto(id, "Dr", author2, new CoverDto("https://example.org/example"),
-                "https://example.org/example");
-
-        when(songMapper.toDto(Mockito.<Song>any())).thenReturn(songDto);
-
-        Image photo2 = new Image();
-        photo2.setCreatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        photo2.setId(UUID.randomUUID());
-        photo2.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        photo2.setUrl("https://example.org/example");
-
-        Author author3 = new Author();
-        author3.setCreatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        author3.setGenre(Genre.CLASSICAL);
-        author3.setId(UUID.randomUUID());
-        author3.setName("Name");
-        author3.setPhoto(photo2);
-        author3.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-
-        Cover cover2 = new Cover();
-        cover2.setCreatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        cover2.setId(UUID.randomUUID());
-        cover2.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        cover2.setUrl("https://example.org/example");
-
-        Song song2 = new Song();
-        song2.setAuthor(author3);
-        song2.setCover(cover2);
-        song2.setCreatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        song2.setGenre(Genre.CLASSICAL);
-        song2.setId(UUID.randomUUID());
-        song2.setReleaseDate(LocalDate.of(2020, 1, 1).atStartOfDay());
-        song2.setTitle("Dr");
-        song2.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        song2.setUrl("https://example.org/example");
-        song2.setUsers(new ArrayList<>());
-
-        SongDto actualUpdateResult = songServiceImpl.update(song2);
-
-        verify(songRepository).save(Mockito.<Song>any());
-        verify(songMapper).toDto(Mockito.<Song>any());
-        assertSame(songDto, actualUpdateResult);
+        verify(songRepository).save(Mockito.any());
+        verify(songMapper).toDto(Mockito.any());
+        assertSame(expSongDto, actualUpdateResult);
     }
 
     @Test
     void testRemoveById() {
 
-        doNothing().when(songRepository).deleteById(Mockito.<UUID>any());
+        doNothing().when(songRepository).deleteById(Mockito.any());
 
         songServiceImpl.removeById(UUID.randomUUID());
 
-        verify(songRepository).deleteById(Mockito.<UUID>any());
+        verify(songRepository).deleteById(Mockito.any());
     }
 }

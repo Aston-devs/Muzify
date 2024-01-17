@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -27,6 +28,10 @@ import ru.musify.musicservice.util.mapper.ImageMapper;
 @ContextConfiguration(classes = {ImageServiceImpl.class})
 @ExtendWith(SpringExtension.class)
 class ImageServiceImplTest {
+
+    private Image expImage;
+    private ImageDto expImageDto;
+
     @MockBean
     private ImageMapper imageMapper;
 
@@ -36,25 +41,32 @@ class ImageServiceImplTest {
     @Autowired
     private ImageServiceImpl imageServiceImpl;
 
+    @BeforeEach
+    void setUp() {
+
+        expImage = new Image();
+        expImage.setCreatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
+        expImage.setId(UUID.randomUUID());
+        expImage.setUpdatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
+        expImage.setUrl("https://example.org/example");
+
+        expImageDto = new ImageDto(UUID.randomUUID(), "https://example.org/example");
+    }
+
+
     @Test
     void testFindById() {
 
-        Image image = new Image();
-        image.setCreatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        image.setId(UUID.randomUUID());
-        image.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        image.setUrl("https://example.org/example");
-        Optional<Image> ofResult = Optional.of(image);
-        when(imageRepository.findById(Mockito.<UUID>any())).thenReturn(ofResult);
-        ImageDto imageDto = new ImageDto(UUID.randomUUID(), "https://example.org/example");
+        Optional<Image> ofResult = Optional.of(expImage);
 
-        when(imageMapper.toDto(Mockito.<Image>any())).thenReturn(imageDto);
+        when(imageRepository.findById(Mockito.any())).thenReturn(ofResult);
+        when(imageMapper.toDto(Mockito.any())).thenReturn(expImageDto);
 
         ImageDto actualFindByIdResult = imageServiceImpl.findById(UUID.randomUUID());
 
-        verify(imageRepository).findById(Mockito.<UUID>any());
-        verify(imageMapper).toDto(Mockito.<Image>any());
-        assertSame(imageDto, actualFindByIdResult);
+        verify(imageRepository).findById(Mockito.any());
+        verify(imageMapper).toDto(Mockito.any());
+        assertSame(expImageDto, actualFindByIdResult);
     }
 
     @Test
@@ -71,62 +83,36 @@ class ImageServiceImplTest {
     @Test
     void testSave() {
 
-        Image image = new Image();
-        image.setCreatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        image.setId(UUID.randomUUID());
-        image.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        image.setUrl("https://example.org/example");
-        when(imageRepository.save(Mockito.<Image>any())).thenReturn(image);
-        ImageDto imageDto = new ImageDto(UUID.randomUUID(), "https://example.org/example");
+        when(imageRepository.save(Mockito.any())).thenReturn(expImage);
+        when(imageMapper.toDto(Mockito.any())).thenReturn(expImageDto);
 
-        when(imageMapper.toDto(Mockito.<Image>any())).thenReturn(imageDto);
+        ImageDto actualSaveResult = imageServiceImpl.save(expImage);
 
-        Image image2 = new Image();
-        image2.setCreatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        image2.setId(UUID.randomUUID());
-        image2.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        image2.setUrl("https://example.org/example");
-
-        ImageDto actualSaveResult = imageServiceImpl.save(image2);
-
-        verify(imageRepository).save(Mockito.<Image>any());
-        verify(imageMapper).toDto(Mockito.<Image>any());
-        assertSame(imageDto, actualSaveResult);
+        verify(imageRepository).save(Mockito.any());
+        verify(imageMapper).toDto(Mockito.any());
+        assertSame(expImageDto, actualSaveResult);
     }
 
     @Test
     void testUpdate() {
 
-        Image image = new Image();
-        image.setCreatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        image.setId(UUID.randomUUID());
-        image.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        image.setUrl("https://example.org/example");
-        when(imageRepository.save(Mockito.<Image>any())).thenReturn(image);
-        ImageDto imageDto = new ImageDto(UUID.randomUUID(), "https://example.org/example");
+        when(imageRepository.save(Mockito.any())).thenReturn(expImage);
+        when(imageMapper.toDto(Mockito.any())).thenReturn(expImageDto);
 
-        when(imageMapper.toDto(Mockito.<Image>any())).thenReturn(imageDto);
+        ImageDto actualUpdateResult = imageServiceImpl.update(expImage);
 
-        Image image2 = new Image();
-        image2.setCreatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        image2.setId(UUID.randomUUID());
-        image2.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        image2.setUrl("https://example.org/example");
-
-        ImageDto actualUpdateResult = imageServiceImpl.update(image2);
-
-        verify(imageRepository).save(Mockito.<Image>any());
-        verify(imageMapper).toDto(Mockito.<Image>any());
-        assertSame(imageDto, actualUpdateResult);
+        verify(imageRepository).save(Mockito.any());
+        verify(imageMapper).toDto(Mockito.any());
+        assertSame(expImageDto, actualUpdateResult);
     }
 
     @Test
     void testRemoveById() {
 
-        doNothing().when(imageRepository).deleteById(Mockito.<UUID>any());
+        doNothing().when(imageRepository).deleteById(Mockito.any());
 
         imageServiceImpl.removeById(UUID.randomUUID());
 
-        verify(imageRepository).deleteById(Mockito.<UUID>any());
+        verify(imageRepository).deleteById(Mockito.any());
     }
 }

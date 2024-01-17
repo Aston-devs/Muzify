@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -29,6 +30,10 @@ import ru.musify.musicservice.util.mapper.UserMapper;
 @ContextConfiguration(classes = {UserServiceImpl.class})
 @ExtendWith(SpringExtension.class)
 class UserServiceImplTest {
+
+    private User expUser;
+    private UserDto expUserDto;
+
     @MockBean
     private SongMapper songMapper;
 
@@ -41,26 +46,32 @@ class UserServiceImplTest {
     @Autowired
     private UserServiceImpl userServiceImpl;
 
+    @BeforeEach
+    void setup() {
+
+        expUser = new User();
+        expUser.setCreatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
+        expUser.setId(UUID.randomUUID());
+        expUser.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
+        expUser.setUserSongs(new ArrayList<>());
+
+        expUserDto = new UserDto(UUID.randomUUID(), new ArrayList<>());
+
+    }
+
     @Test
     void testFindById() {
 
-        User user = new User();
-        user.setCreatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        user.setId(UUID.randomUUID());
-        user.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        user.setUserSongs(new ArrayList<>());
-        Optional<User> ofResult = Optional.of(user);
-        when(userRepository.findById(Mockito.<UUID>any())).thenReturn(ofResult);
-        UUID id = UUID.randomUUID();
-        UserDto userDto = new UserDto(id, new ArrayList<>());
+        Optional<User> ofResult = Optional.of(expUser);
 
-        when(userMapper.toDto(Mockito.<User>any())).thenReturn(userDto);
+        when(userRepository.findById(Mockito.any())).thenReturn(ofResult);
+        when(userMapper.toDto(Mockito.any())).thenReturn(expUserDto);
 
         UserDto actualFindByIdResult = userServiceImpl.findById(UUID.randomUUID());
 
-        verify(userRepository).findById(Mockito.<UUID>any());
-        verify(userMapper).toDto(Mockito.<User>any());
-        assertSame(userDto, actualFindByIdResult);
+        verify(userRepository).findById(Mockito.any());
+        verify(userMapper).toDto(Mockito.any());
+        assertSame(expUserDto, actualFindByIdResult);
     }
 
     @Test
@@ -77,86 +88,58 @@ class UserServiceImplTest {
     @Test
     void testSave() {
 
-        User user = new User();
-        user.setCreatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        user.setId(UUID.randomUUID());
-        user.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        user.setUserSongs(new ArrayList<>());
-        when(userRepository.save(Mockito.<User>any())).thenReturn(user);
-        UUID id = UUID.randomUUID();
-        UserDto userDto = new UserDto(id, new ArrayList<>());
+        when(userRepository.save(Mockito.any())).thenReturn(expUser);
+        when(userMapper.toDto(Mockito.any())).thenReturn(expUserDto);
 
-        when(userMapper.toDto(Mockito.<User>any())).thenReturn(userDto);
+        UserDto actualSaveResult = userServiceImpl.save(expUser);
 
-        User user2 = new User();
-        user2.setCreatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        user2.setId(UUID.randomUUID());
-        user2.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        user2.setUserSongs(new ArrayList<>());
-
-        UserDto actualSaveResult = userServiceImpl.save(user2);
-
-        verify(userRepository).save(Mockito.<User>any());
-        verify(userMapper).toDto(Mockito.<User>any());
-        assertSame(userDto, actualSaveResult);
+        verify(userRepository).save(Mockito.any());
+        verify(userMapper).toDto(Mockito.any());
+        assertSame(expUserDto, actualSaveResult);
     }
 
     @Test
     void testUpdate() {
 
-        User user = new User();
-        user.setCreatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        user.setId(UUID.randomUUID());
-        user.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        user.setUserSongs(new ArrayList<>());
-        when(userRepository.save(Mockito.<User>any())).thenReturn(user);
-        UUID id = UUID.randomUUID();
-        UserDto userDto = new UserDto(id, new ArrayList<>());
+        when(userRepository.save(Mockito.any())).thenReturn(expUser);
+        when(userMapper.toDto(Mockito.any())).thenReturn(expUserDto);
 
-        when(userMapper.toDto(Mockito.<User>any())).thenReturn(userDto);
+        UserDto actualUpdateResult = userServiceImpl.update(expUser);
 
-        User user2 = new User();
-        user2.setCreatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        user2.setId(UUID.randomUUID());
-        user2.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
-        user2.setUserSongs(new ArrayList<>());
-
-        UserDto actualUpdateResult = userServiceImpl.update(user2);
-
-        verify(userRepository).save(Mockito.<User>any());
-        verify(userMapper).toDto(Mockito.<User>any());
-        assertSame(userDto, actualUpdateResult);
+        verify(userRepository).save(Mockito.any());
+        verify(userMapper).toDto(Mockito.any());
+        assertSame(expUserDto, actualUpdateResult);
     }
 
     @Test
     void testRemoveById() {
 
-        doNothing().when(userRepository).deleteById(Mockito.<UUID>any());
+        doNothing().when(userRepository).deleteById(Mockito.any());
 
         userServiceImpl.removeById(UUID.randomUUID());
 
-        verify(userRepository).deleteById(Mockito.<UUID>any());
+        verify(userRepository).deleteById(Mockito.any());
     }
 
     @Test
     void testIsUserExists() {
 
-        when(userRepository.existsById(Mockito.<UUID>any())).thenReturn(true);
+        when(userRepository.existsById(Mockito.any())).thenReturn(true);
 
         boolean actualIsUserExistsResult = userServiceImpl.isUserExists(UUID.randomUUID());
 
-        verify(userRepository).existsById(Mockito.<UUID>any());
+        verify(userRepository).existsById(Mockito.any());
         assertTrue(actualIsUserExistsResult);
     }
 
     @Test
     void testFindSongsByUserId() {
 
-        when(userRepository.findSongsByUserId(Mockito.<UUID>any())).thenReturn(new ArrayList<>());
+        when(userRepository.findSongsByUserId(Mockito.any())).thenReturn(new ArrayList<>());
 
         List<SongDto> actualFindSongsByUserIdResult = userServiceImpl.findSongsByUserId(UUID.randomUUID());
 
-        verify(userRepository).findSongsByUserId(Mockito.<UUID>any());
+        verify(userRepository).findSongsByUserId(Mockito.any());
         assertTrue(actualFindSongsByUserIdResult.isEmpty());
     }
 }
