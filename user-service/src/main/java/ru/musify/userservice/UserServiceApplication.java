@@ -1,19 +1,20 @@
 package ru.musify.userservice;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import ru.musify.userservice.model.Role;
 import ru.musify.userservice.model.User;
 import ru.musify.userservice.repository.UserRepository;
 
 @SpringBootApplication
+@RequiredArgsConstructor
 public class UserServiceApplication implements CommandLineRunner {
 
-    @Autowired
-    private UserRepository userRepository;
+    private static final String ROLE = "ROLE_ADMIN";
+
+    private final UserRepository userRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(UserServiceApplication.class, args);
@@ -21,15 +22,14 @@ public class UserServiceApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        User adminAccount = userRepository.findByRole(Role.ADMIN);
-
-        if (null == adminAccount) {
-            User user = new User();
-            user.setEmail("admin@gmail.com");
-            user.setUsername("admin");
-            user.setRole(Role.ADMIN);
-            user.setPassword(new BCryptPasswordEncoder().encode("admin"));
-            userRepository.save(user);
-        }
+        User adminAccount = userRepository.findByRole(ROLE).orElseGet(() -> {
+            return User.builder()
+                    .role("ROLE_ADMIN")
+                    .email("admin@gmail.com")
+                    .username("musify_admin")
+                    .password(new BCryptPasswordEncoder().encode("admin"))
+                    .build();
+        });
+        userRepository.save(adminAccount);
     }
 }

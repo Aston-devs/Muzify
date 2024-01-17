@@ -13,15 +13,12 @@ import java.util.function.Function;
 @Component
 public class JWTUtil {
 
-
     @Value("${jwt.secret}")
     public static String secret;
-
 
     public void validateToken(final String token) {
         Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token);
     }
-
 
     private Key getSignKey() {
         byte[] key = Decoders.BASE64.decode(secret);
@@ -31,6 +28,7 @@ public class JWTUtil {
     public String extructUsernameID(String token) {
         return extractClaim(token, Claims::getId);
     }
+
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claim = extractAllClaims(token);
         return claimsResolver.apply(claim);
