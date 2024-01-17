@@ -11,6 +11,7 @@ import java.util.function.Predicate;
 public class RouteValidator {
     public static final List<String> OPEN_API_ENDPOINTS = List.of(
             "/api/v1/musify/auth/signup",
+            "/api/v1/musify/auth/login",
             "/eureka"
     );
 
@@ -18,5 +19,4 @@ public class RouteValidator {
             request -> OPEN_API_ENDPOINTS
                     .stream()
                     .noneMatch(uri -> request.getURI().getPath().contains(uri));
-
 }

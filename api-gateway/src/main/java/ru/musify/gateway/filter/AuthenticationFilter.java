@@ -12,14 +12,15 @@ import ru.musify.gateway.util.JWTUtil;
 @Component
 public class AuthenticationFilter extends AbstractGatewayFilterFactory<AuthenticationFilter.Config> {
 
-    @Autowired
-    private RouteValidator validator;
+    private final RouteValidator validator;
+
+    private final JWTUtil jwtUtil;
 
     @Autowired
-    private JWTUtil jwtUtil;
-
-    public AuthenticationFilter() {
+    public AuthenticationFilter(RouteValidator validator, JWTUtil jwtUtil) {
         super(Config.class);
+        this.validator = validator;
+        this.jwtUtil = jwtUtil;
     }
 
     @Override
