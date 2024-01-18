@@ -13,10 +13,10 @@ import java.util.Base64;
 @Component
 public class JWTUtil {
 
-    private final String SECRET = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
+    private final String secret = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
 
     private Key getKey() {
-        return new SecretKeySpec(Base64.getDecoder().decode(SECRET),
+        return new SecretKeySpec(Base64.getDecoder().decode(secret),
                 SignatureAlgorithm.HS256.getJcaName());
     }
 
