@@ -1,5 +1,6 @@
 package ru.musify.musicservice.service.impl;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -30,6 +31,10 @@ import static org.mockito.Mockito.when;
 @ContextConfiguration(classes = {AuthorServiceImpl.class})
 @ExtendWith(SpringExtension.class)
 class AuthorServiceImplTest {
+
+    private Author expAuthor;
+    private AuthorDto expAuthorDto;
+
     @MockBean
     private AuthorMapper authorMapper;
 
@@ -39,35 +44,47 @@ class AuthorServiceImplTest {
     @Autowired
     private AuthorServiceImpl authorServiceImpl;
 
+    @BeforeEach
+    void setUp() {
+        Image expImage = new Image();
+        expImage.setCreatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
+        expImage.setId(UUID.randomUUID());
+        expImage.setUpdatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
+        expImage.setUrl("https://example.org/example");
+
+        expAuthor = Author.builder()
+                .id(UUID.randomUUID())
+                .name("AuthorName")
+                .genre(Genre.CLASSICAL)
+                .photo(expImage)
+                .build();
+
+        expAuthorDto = AuthorDto.builder()
+                .id(expAuthor.getId())
+                .name(expAuthor.getName())
+                .genre(Genre.CLASSICAL)
+                .photo(
+                        ImageDto.builder()
+                                .id(expImage.getId())
+                                .url(expImage.getUrl())
+                                .build()
+                )
+                .build();
+    }
+
     @Test
     void testFindById() {
 
-        Image photo = new Image();
-        photo.setCreatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-        photo.setId(UUID.randomUUID());
-        photo.setUpdatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-        photo.setUrl("https://example.org/example");
+        Optional<Author> ofResult = Optional.of(expAuthor);
 
-        Author author = new Author();
-        author.setCreatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-        author.setGenre(Genre.CLASSICAL);
-        author.setId(UUID.randomUUID());
-        author.setName("Name");
-        author.setPhoto(photo);
-        author.setUpdatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-        Optional<Author> ofResult = Optional.of(author);
         when(authorRepository.findById(Mockito.any())).thenReturn(ofResult);
-        UUID id = UUID.randomUUID();
-        AuthorDto authorDto = new AuthorDto(id, "Name", Genre.CLASSICAL,
-                new ImageDto(UUID.randomUUID(), "https://example.org/example"));
-
-        when(authorMapper.toDto(Mockito.any())).thenReturn(authorDto);
+        when(authorMapper.toDto(Mockito.any())).thenReturn(expAuthorDto);
 
         AuthorDto actualFindByIdResult = authorServiceImpl.findById(UUID.randomUUID());
 
         verify(authorRepository).findById(Mockito.any());
         verify(authorMapper).toDto(Mockito.any());
-        assertSame(authorDto, actualFindByIdResult);
+        assertSame(expAuthorDto, actualFindByIdResult);
     }
 
     @Test
@@ -84,122 +101,45 @@ class AuthorServiceImplTest {
     @Test
     void testSave() {
 
-        Image photo = new Image();
-        photo.setCreatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-        photo.setId(UUID.randomUUID());
-        photo.setUpdatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-        photo.setUrl("https://example.org/example");
+        when(authorRepository.save(Mockito.any())).thenReturn(expAuthor);
+        when(authorMapper.toDto(Mockito.any())).thenReturn(expAuthorDto);
 
-        Author author = new Author();
-        author.setCreatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-        author.setGenre(Genre.CLASSICAL);
-        author.setId(UUID.randomUUID());
-        author.setName("Name");
-        author.setPhoto(photo);
-        author.setUpdatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-        when(authorRepository.save(Mockito.any())).thenReturn(author);
-        UUID id = UUID.randomUUID();
-        AuthorDto authorDto = new AuthorDto(id, "Name", Genre.CLASSICAL,
-                new ImageDto(UUID.randomUUID(), "https://example.org/example"));
-
-        when(authorMapper.toDto(Mockito.any())).thenReturn(authorDto);
-
-        Image photo2 = new Image();
-        photo2.setCreatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-        photo2.setId(UUID.randomUUID());
-        photo2.setUpdatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-        photo2.setUrl("https://example.org/example");
-
-        Author author2 = new Author();
-        author2.setCreatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-        author2.setGenre(Genre.CLASSICAL);
-        author2.setId(UUID.randomUUID());
-        author2.setName("Name");
-        author2.setPhoto(photo2);
-        author2.setUpdatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-
-        AuthorDto actualSaveResult = authorServiceImpl.save(author2);
+        AuthorDto actualSaveResult = authorServiceImpl.save(expAuthor);
 
         verify(authorRepository).save(Mockito.any());
         verify(authorMapper).toDto(Mockito.any());
-        assertSame(authorDto, actualSaveResult);
+        assertSame(expAuthorDto, actualSaveResult);
     }
 
     @Test
     void testUpdate() {
 
-        Image photo = new Image();
-        photo.setCreatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-        photo.setId(UUID.randomUUID());
-        photo.setUpdatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-        photo.setUrl("https://example.org/example");
+        when(authorRepository.save(Mockito.any())).thenReturn(expAuthor);
+        when(authorMapper.toDto(Mockito.any())).thenReturn(expAuthorDto);
 
-        Author author = new Author();
-        author.setCreatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-        author.setGenre(Genre.CLASSICAL);
-        author.setId(UUID.randomUUID());
-        author.setName("Name");
-        author.setPhoto(photo);
-        author.setUpdatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-        when(authorRepository.save(Mockito.any())).thenReturn(author);
-        UUID id = UUID.randomUUID();
-        AuthorDto authorDto = new AuthorDto(id, "Name", Genre.CLASSICAL,
-                new ImageDto(UUID.randomUUID(), "https://example.org/example"));
-
-        when(authorMapper.toDto(Mockito.any())).thenReturn(authorDto);
-
-        Image photo2 = new Image();
-        photo2.setCreatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-        photo2.setId(UUID.randomUUID());
-        photo2.setUpdatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-        photo2.setUrl("https://example.org/example");
-
-        Author author2 = new Author();
-        author2.setCreatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-        author2.setGenre(Genre.CLASSICAL);
-        author2.setId(UUID.randomUUID());
-        author2.setName("Name");
-        author2.setPhoto(photo2);
-        author2.setUpdatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-
-        AuthorDto actualUpdateResult = authorServiceImpl.update(author2);
+        AuthorDto actualUpdateResult = authorServiceImpl.update(expAuthor);
 
         verify(authorRepository).save(Mockito.any());
         verify(authorMapper).toDto(Mockito.any());
-        assertSame(authorDto, actualUpdateResult);
+        assertSame(expAuthorDto, actualUpdateResult);
     }
 
     @Test
     void testRemoveById() {
 
         doNothing().when(authorRepository).deleteById(Mockito.any());
-
         authorServiceImpl.removeById(UUID.randomUUID());
-
         verify(authorRepository).deleteById(Mockito.any());
     }
 
     @Test
     void testFindByName() {
 
-        Image photo = new Image();
-        photo.setCreatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-        photo.setId(UUID.randomUUID());
-        photo.setUpdatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-        photo.setUrl("https://example.org/example");
-
-        Author author = new Author();
-        author.setCreatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-        author.setGenre(Genre.CLASSICAL);
-        author.setId(UUID.randomUUID());
-        author.setName("Name");
-        author.setPhoto(photo);
-        author.setUpdatedAt(LocalDate.of(2024, 1, 1).atStartOfDay());
-        when(authorRepository.findAuthorByName(Mockito.any())).thenReturn(author);
+        when(authorRepository.findAuthorByName(Mockito.any())).thenReturn(expAuthor);
 
         Author actualFindByNameResult = authorServiceImpl.findByName("JaneDoe");
 
         verify(authorRepository).findAuthorByName(Mockito.any());
-        assertSame(author, actualFindByNameResult);
+        assertSame(expAuthor, actualFindByNameResult);
     }
 }

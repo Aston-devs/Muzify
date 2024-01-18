@@ -57,7 +57,7 @@ class KafkaMessageListenerTest {
         AuthorDto author = new AuthorDto(id2, "Name", Genre.CLASSICAL,
                 new ImageDto(UUID.randomUUID(), "https://example.org/example"));
 
-        when(songService.save(Mockito.<Song>any())).thenReturn(
+        when(songService.save(Mockito.any())).thenReturn(
                 new SongDto(id, "Dr", author, new CoverDto("https://example.org/example"), "https://example.org/example"));
 
         Image photo = new Image();
@@ -74,19 +74,19 @@ class KafkaMessageListenerTest {
         author2.setPhoto(photo);
         author2.setUpdatedAt(LocalDate.of(1970, 1, 1).atStartOfDay());
         UUID id3 = UUID.randomUUID();
-        when(authorService.save(Mockito.<Author>any())).thenReturn(
+        when(authorService.save(Mockito.any())).thenReturn(
                 new AuthorDto(id3, "Name", Genre.CLASSICAL, new ImageDto(UUID.randomUUID(), "https://example.org/example")));
-        when(authorService.findByName(Mockito.<String>any())).thenReturn(author2);
-        when(coverService.save(Mockito.<Cover>any())).thenReturn(new CoverDto("https://example.org/example"));
+        when(authorService.findByName(Mockito.any())).thenReturn(author2);
+        when(coverService.save(Mockito.any())).thenReturn(new CoverDto("https://example.org/example"));
         when(objectMapper.readValue(Mockito.<String>any(), Mockito.<Class<SongMetaInfo>>any()))
                 .thenReturn(new SongMetaInfo("Dr", "JaneDoe", "https://example.org/example", "https://example.org/example"));
 
         kafkaMessageListener.listen("Meta Info");
 
         verify(objectMapper).readValue(Mockito.<String>any(), Mockito.<Class<SongMetaInfo>>any());
-        verify(authorService).findByName(Mockito.<String>any());
-        verify(coverService).save(Mockito.<Cover>any());
-        verify(songService).save(Mockito.<Song>any());
+        verify(authorService).findByName(Mockito.any());
+        verify(coverService).save(Mockito.any());
+        verify(songService).save(Mockito.any());
     }
 
     @Test
@@ -97,7 +97,7 @@ class KafkaMessageListenerTest {
         AuthorDto author = new AuthorDto(id2, "Name", Genre.CLASSICAL,
                 new ImageDto(UUID.randomUUID(), "https://example.org/example"));
 
-        when(songService.save(Mockito.<Song>any())).thenReturn(
+        when(songService.save(Mockito.any())).thenReturn(
                 new SongDto(id, "Dr", author, new CoverDto("https://example.org/example"), "https://example.org/example"));
 
         Image photo = new Image();
@@ -114,16 +114,16 @@ class KafkaMessageListenerTest {
         author2.setPhoto(photo);
         author2.setUpdatedAt(LocalDate.of(2020, 1, 1).atStartOfDay());
         UUID id3 = UUID.randomUUID();
-        when(authorService.save(Mockito.<Author>any())).thenReturn(
+        when(authorService.save(Mockito.any())).thenReturn(
                 new AuthorDto(id3, "Name", Genre.CLASSICAL, new ImageDto(UUID.randomUUID(), "https://example.org/example")));
-        when(authorService.findByName(Mockito.<String>any())).thenReturn(author2);
-        when(coverService.save(Mockito.<Cover>any())).thenThrow(new IllegalArgumentException("Start saving {}"));
+        when(authorService.findByName(Mockito.any())).thenReturn(author2);
+        when(coverService.save(Mockito.any())).thenThrow(new IllegalArgumentException("Start saving {}"));
         when(objectMapper.readValue(Mockito.<String>any(), Mockito.<Class<SongMetaInfo>>any()))
                 .thenReturn(new SongMetaInfo("Dr", "JaneDoe", "https://example.org/example", "https://example.org/example"));
 
         assertThrows(IllegalArgumentException.class, () -> kafkaMessageListener.listen("Meta Info"));
         verify(objectMapper).readValue(Mockito.<String>any(), Mockito.<Class<SongMetaInfo>>any());
-        verify(authorService).findByName(Mockito.<String>any());
-        verify(coverService).save(Mockito.<Cover>any());
+        verify(authorService).findByName(Mockito.any());
+        verify(coverService).save(Mockito.any());
     }
 }
