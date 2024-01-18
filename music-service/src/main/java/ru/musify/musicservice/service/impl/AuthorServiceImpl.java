@@ -2,6 +2,7 @@ package ru.musify.musicservice.service.impl;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -44,7 +45,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     return allAuthors.stream()
         .map(authorMapper::toDto)
-        .toList();
+        .collect(Collectors.toList());
   }
 
   @Override

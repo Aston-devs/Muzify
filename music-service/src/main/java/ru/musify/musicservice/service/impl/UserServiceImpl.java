@@ -2,6 +2,7 @@ package ru.musify.musicservice.service.impl;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -49,7 +50,7 @@ public class UserServiceImpl implements UserService {
 
     return allSongs.stream()
         .map(userMapper::toDto)
-        .toList();
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -94,6 +95,6 @@ public class UserServiceImpl implements UserService {
 
     return userSongs.stream()
         .map(songMapper::toDto)
-        .toList();
+        .collect(Collectors.toList());
   }
 }
