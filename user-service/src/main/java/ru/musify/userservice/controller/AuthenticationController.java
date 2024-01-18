@@ -6,21 +6,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 import ru.musify.userservice.dto.LoginRequest;
 import ru.musify.userservice.dto.SignUpRequest;
 import ru.musify.userservice.services.AuthenticationService;
 import ru.musify.userservice.services.JwtService;
-import ru.musify.userservice.services.impl.UserDetailsImpl;
 import ru.musify.userservice.services.impl.UserDetailsServiceImpl;
 
 import java.util.UUID;
 
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
+@CrossOrigin(origins = "http://localhost:3000")
 public class AuthenticationController {
 
     private final JwtService jwtService;
