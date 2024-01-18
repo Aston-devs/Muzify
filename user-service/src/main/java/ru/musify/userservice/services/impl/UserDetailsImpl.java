@@ -14,12 +14,13 @@ import java.util.UUID;
 public class UserDetailsImpl implements UserDetails {
 
     private final User user;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(user.getRole()));
     }
 
-    public UUID getID(){
+    public UUID getID() {
         return user.getId();
     }
 

@@ -55,8 +55,6 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                 }
 
 
-
-
             }
             return chain.filter(exchange.mutate().request(request).build());
         }));

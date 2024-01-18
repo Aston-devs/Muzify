@@ -16,15 +16,16 @@ import java.util.Date;
 import java.util.UUID;
 
 @Service
-public class JWTServiceImpl  implements JwtService {
+public class JWTServiceImpl implements JwtService {
 
     @Value("${jwt_secret}")
     private String secret;
 
-    private Key getKey(){
+    private Key getKey() {
         return new SecretKeySpec(Base64.getDecoder().decode(secret),
                 SignatureAlgorithm.HS256.getJcaName());
     }
+
     public String generateToken(String username, UUID id) {
         Instant now = Instant.now();
         String jwtToken = Jwts.builder()
@@ -47,7 +48,6 @@ public class JWTServiceImpl  implements JwtService {
 
         return jwt.getBody().getSubject();
     }
-
 
 
 }

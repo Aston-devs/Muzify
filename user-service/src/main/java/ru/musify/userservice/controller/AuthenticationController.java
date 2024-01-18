@@ -31,11 +31,12 @@ public class AuthenticationController {
 
     private final AuthenticationManager authenticationManager;
 
-    private UUID getUserID(String userName){
+    private UUID getUserID(String userName) {
         return userDetailsService.loadUserByUsername(userName).getID();
     }
+
     @PostMapping("/signup")
-    public ResponseEntity<String> registration(@RequestBody  SignUpRequest request) {
+    public ResponseEntity<String> registration(@RequestBody SignUpRequest request) {
         authenticationService.signup(request);
         return ResponseEntity.ok(jwtService.generateToken(request.username(), getUserID(request.username())));
     }
