@@ -8,6 +8,7 @@ import ru.musify.userservice.model.User;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 public class UserDetailsImpl implements UserDetails {
@@ -16,6 +17,10 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(user.getRole()));
+    }
+
+    public UUID getID(){
+        return user.getId();
     }
 
     @Override

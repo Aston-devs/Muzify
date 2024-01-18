@@ -30,23 +30,24 @@ spring:
           lower-case-service-is: true
       routes:
         - id: player-service
-          uri: http://localhost:8081
+          uri: lb://player-service
           predicates:
             - Path=/api/v1/player/**
           filters:
             - AuthenticationFilter
 
         - id: music-service
-          uri: http://localhost:8085
+          uri: lb://music-service
           predicates:
             - Path=/api/v1/musify/audios/**
           filters:
             - AuthenticationFilter
 
         - id: user-service
-          uri: http://localhost:8090
+          uri: lb://user-service
           predicates:
             - Path=/api/v1/auth/**
+          filters:
+            - AuthenticationFilter
 
-jwt:
-  secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+jwt_secret: "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970"
