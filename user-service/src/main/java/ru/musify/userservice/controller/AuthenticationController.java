@@ -7,14 +7,15 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.musify.userservice.dto.LoginRequest;
 import ru.musify.userservice.dto.SignUpRequest;
 import ru.musify.userservice.services.AuthenticationService;
 import ru.musify.userservice.services.JwtService;
+import ru.musify.userservice.services.impl.UserDetailsImpl;
+import ru.musify.userservice.services.impl.UserDetailsServiceImpl;
+
+import java.util.UUID;
 
 
 @RestController
@@ -24,16 +25,20 @@ public class AuthenticationController {
 
     private final JwtService jwtService;
 
-    private final UserDetailsService userDetailsService;
+    private final UserDetailsServiceImpl userDetailsService;
 
     private final AuthenticationService authenticationService;
 
     private final AuthenticationManager authenticationManager;
 
+    private UUID getUserID(String userName) {
+        return userDetailsService.loadUserByUsername(userName).getID();
+    }
+
     @PostMapping("/signup")
-    public ResponseEntity<String> registration(@RequestBody  SignUpRequest request) {
+    public ResponseEntity<String> registration(@RequestBody SignUpRequest request) {
         authenticationService.signup(request);
-        return ResponseEntity.ok(jwtService.generateToken(request.username()));
+        return ResponseEntity.ok(jwtService.generateToken(request.username(), getUserID(request.username())));
     }
 
     @PostMapping("/login")
@@ -46,6 +51,12 @@ public class AuthenticationController {
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect credentials!");
         }
-        return ResponseEntity.ok(jwtService.generateToken(request.username()));
+        return ResponseEntity.ok(jwtService.generateToken(request.username(), getUserID(request.username())));
+    }
+
+    @GetMapping("/validate")
+    public String validateToken(@RequestParam("token") String token) {
+        jwtService.validateTokenAndRetrieveClaim(token);
+        return "Token is valid";
     }
 }

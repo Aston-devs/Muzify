@@ -4,7 +4,9 @@ val mapstructVersion = "1.5.5.Final"
 val lombokMapstructBindingVersion = "0.2.0"
 
 dependencies {
+
     implementation("com.auth0:java-jwt:4.4.0")
+    implementation ("io.jsonwebtoken:jjwt-api:0.11.5")
     implementation("org.flywaydb:flyway-core")
     implementation("org.projectlombok:lombok:$lombokVersion")
     implementation("org.mapstruct:mapstruct:$mapstructVersion")
@@ -17,7 +19,8 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
 
     runtimeOnly("org.postgresql:postgresql")
-
+    runtimeOnly ("io.jsonwebtoken:jjwt-impl:0.11.5")
+    runtimeOnly ("io.jsonwebtoken:jjwt-jackson:0.11.5")
     compileOnly("org.projectlombok:lombok:$lombokVersion")
     annotationProcessor("org.projectlombok:lombok:$lombokVersion")
     annotationProcessor("org.mapstruct:mapstruct-processor:$mapstructVersion")
