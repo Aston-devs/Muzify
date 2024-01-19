@@ -29,6 +29,6 @@ jobs:
         uses: docker/build-push-action@v5.1.0
         with:
           context: .
-          file: ./services/${{ matrix.service }}/Dockerfile
+          file: ./${{ matrix.service }}/Dockerfile
           push: true
           tags: muzify/${{ matrix.service }}:latest
