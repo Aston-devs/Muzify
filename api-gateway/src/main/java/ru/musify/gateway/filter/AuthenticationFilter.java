@@ -1,6 +1,8 @@
 package ru.musify.gateway.filter;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.core.io.buffer.DefaultDataBufferFactory;
@@ -22,6 +24,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
     private final RouteValidator validator;
 
     private final JWTUtil jwtUtil;
+    private static final String ROLE_ADMIN = "ROLE_ADMIN";
 
     @Autowired
     public AuthenticationFilter(RouteValidator validator, JWTUtil jwtUtil) {
@@ -45,12 +48,18 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                 if (!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
                     throw new RuntimeException("missing authorization header");
                 }
-
                 String authHeader = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
                 if (authHeader != null && authHeader.startsWith("Bearer ")) {
                     authHeader = authHeader.substring(7);
                     try {
-                        String userID = jwtUtil.validateToken(authHeader);
+                        Jws<Claims> jws = jwtUtil.validateToken(authHeader);
+                        String userID = jws.getBody().getSubject();
+                        String userRole = jwtUtil.getUserRole(jws);
+                        if (validator.isAdminRout.test(request)) {
+                            if (!userRole.contains(ROLE_ADMIN)) {
+                                throw new RuntimeException("un authorized access to application");
+                            }
+                        }
                         request.mutate().header("loggedInUser", userID).build();
                         response.writeWith(Flux.just(new DefaultDataBufferFactory().wrap(userID.getBytes())));
                     } catch (JWTVerificationException e) {
