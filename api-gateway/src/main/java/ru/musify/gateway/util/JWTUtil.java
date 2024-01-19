@@ -8,7 +8,9 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collection;
 
 @Component
 public class JWTUtil {
@@ -20,13 +22,28 @@ public class JWTUtil {
                 SignatureAlgorithm.HS256.getJcaName());
     }
 
-    public String validateToken(String token) {
+    public Jws<Claims> validateToken(String token) {
         Jws<Claims> jwt = Jwts.parserBuilder()
                 .setSigningKey(getKey())
                 .build()
                 .parseClaimsJws(token);
 
-        return jwt.getBody().getSubject();
+        return jwt;
     }
+
+    public String getUserRole(Jws<Claims> jws) {
+        ArrayList<String> roles = new ArrayList<>();
+        Claims claims = jws.getBody();
+        if (claims.containsKey("role")) {
+            Object rolesObj = claims.get("role");
+            if (rolesObj instanceof Collection rolesColl) {
+                for (Object role : rolesColl) {
+                    roles.add(role.toString());
+                }
+            }
+        }
+        return roles.toString();
+    }
+
 
 }

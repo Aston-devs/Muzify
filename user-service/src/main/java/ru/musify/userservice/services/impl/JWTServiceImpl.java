@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import ru.musify.userservice.services.JwtService;
 
@@ -12,6 +13,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
 import java.time.Instant;
 import java.util.Base64;
+import java.util.Collection;
 import java.util.Date;
 import java.util.UUID;
 
@@ -26,10 +28,11 @@ public class JWTServiceImpl implements JwtService {
                 SignatureAlgorithm.HS256.getJcaName());
     }
 
-    public String generateToken(String username, UUID id) {
+    public String generateToken(String username, UUID id, Collection<? extends GrantedAuthority> roles) {
         Instant now = Instant.now();
         String jwtToken = Jwts.builder()
                 .claim("name", username)
+                .claim("role", roles)
                 .setSubject(String.valueOf(id))
                 .setId(UUID.randomUUID().toString())
                 .setIssuedAt(Date.from(now))

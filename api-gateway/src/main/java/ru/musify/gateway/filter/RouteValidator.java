@@ -16,6 +16,14 @@ public class RouteValidator {
             "/eureka"
     );
 
+    public static final List<String> ADMIN_API_ENDPOINTS = List.of(
+            "/api/v1/player/upload"
+    );
+
+    public Predicate<ServerHttpRequest> isAdminRout =
+            request -> ADMIN_API_ENDPOINTS
+                    .stream()
+                    .anyMatch(uri -> request.getURI().getPath().contains(uri));
     public Predicate<ServerHttpRequest> isSecured =
             request -> OPEN_API_ENDPOINTS
                     .stream()

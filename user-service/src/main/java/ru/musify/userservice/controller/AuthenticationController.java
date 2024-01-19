@@ -6,15 +6,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import ru.musify.userservice.dto.LoginRequest;
 import ru.musify.userservice.dto.SignUpRequest;
 import ru.musify.userservice.services.AuthenticationService;
 import ru.musify.userservice.services.JwtService;
-import ru.musify.userservice.services.impl.UserDetailsImpl;
 import ru.musify.userservice.services.impl.UserDetailsServiceImpl;
 
+import java.util.Collection;
 import java.util.UUID;
 
 
@@ -35,10 +36,14 @@ public class AuthenticationController {
         return userDetailsService.loadUserByUsername(userName).getID();
     }
 
+    private Collection<? extends GrantedAuthority> getUserRole(String username) {
+        return userDetailsService.loadUserByUsername(username).getAuthorities();
+    }
+
     @PostMapping("/signup")
     public ResponseEntity<String> registration(@RequestBody SignUpRequest request) {
         authenticationService.signup(request);
-        return ResponseEntity.ok(jwtService.generateToken(request.username(), getUserID(request.username())));
+        return ResponseEntity.ok(jwtService.generateToken(request.username(), getUserID(request.username()), getUserRole(request.username())));
     }
 
     @PostMapping("/login")
@@ -51,7 +56,7 @@ public class AuthenticationController {
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect credentials!");
         }
-        return ResponseEntity.ok(jwtService.generateToken(request.username(), getUserID(request.username())));
+        return ResponseEntity.ok(jwtService.generateToken(request.username(), getUserID(request.username()), getUserRole(request.username())));
     }
 
     @GetMapping("/validate")
@@ -59,4 +64,5 @@ public class AuthenticationController {
         jwtService.validateTokenAndRetrieveClaim(token);
         return "Token is valid";
     }
+
 }
