@@ -28,7 +28,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5.1.0
         with:
-          context: ./${{ matrix.service }}
+          context: ./${{ matrix.service }}/
           file: ./${{ matrix.service }}/Dockerfile
           push: true
           tags: muzify/${{ matrix.service }}:latest
