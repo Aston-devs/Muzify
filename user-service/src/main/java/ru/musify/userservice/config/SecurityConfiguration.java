@@ -46,13 +46,6 @@ public class SecurityConfiguration {
         MvcRequestMatcher.Builder mvcMatcherBuilder = mvc(introspector);
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(httpSecurityCorsConfigurer ->
-                        httpSecurityCorsConfigurer.configurationSource(request -> {
-                            CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
-                            corsConfiguration.addAllowedOrigin("http://localhost:3000");
-                            return corsConfiguration;
-                        })
-                )
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 )

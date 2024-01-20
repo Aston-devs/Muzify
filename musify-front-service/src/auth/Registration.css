@@ -1,0 +1,92 @@
+.register-container {
+  display: flex;
+  height: 120vh;
+}
+
+.register-header {
+  background-image: url("speaker.png");
+  width: 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.register-content {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.register-content form {
+  width: 100%;
+  max-width: 400px;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  padding: 20px;
+  border: 2px solid #a086c6;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.register-btn {
+  color: var(--2, #503e74);
+  font-family: "Roboto", sans-serif;
+  font-size: 2.5rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.register-form div {
+  margin-bottom: 15px;
+}
+
+.register-form label {
+  display: block;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.register-form input {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.register-form button {
+  width: 100%;
+  padding: 10px;
+  background-color: #a086c6;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.register-form button:hover {
+  background-color: #896bad;
+}
+
+.login-redirect-container {
+  font-size: 15px;
+}
+
+.login-redirect-btn {
+  border: none;
+  background: none;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.login-redirect-btn:hover {
+  color: #896bad;
+}

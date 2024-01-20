@@ -35,7 +35,7 @@ export default function SongItem({ song, currentSongId, onPlay }) {
       </div>
       <audio
         ref={audioRef}
-        src={`http://localhost:8081/api/v1/player/play/${song.url}`}
+        src={`http://localhost:8080/api/v1/player/play/${song.url}`}
         preload="none"
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}

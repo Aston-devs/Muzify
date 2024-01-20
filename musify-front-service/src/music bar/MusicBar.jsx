@@ -1,24 +1,67 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import Playlist from "../playlist/Playlist";
+import axios from "axios";
 import "./MusicBar.css";
 
 export default function MusicBar() {
+  const [userId, setUserId] = useState("");
   const [allSongs, setAllSongs] = useState([]);
+  const [jwtToken, setJwtToken] = useState("");
+  const [userSongs, setUserSongs] = useState("");
   const [showSongs, setShowSongs] = useState(false);
   const [songsLoaded, setSongsLoaded] = useState(false);
   const [activeButton, setActiveButton] = useState(null);
   const [currentSongId, setCurrentSongId] = useState(null);
 
-  const loadAllSongs = () => {
-    fetch("http://localhost:8085/api/v1/musify/audios")
-      .then((response) => response.json())
-      .then((data) => {
-        setAllSongs(data);
-        setSongsLoaded(true);
-      })
-      .catch((error) =>
-        console.error("Ошибка при получении всех песен:", error)
+  useEffect(() => {
+    const storedToken = localStorage.getItem("jwtToken");
+    if (storedToken) {
+      setJwtToken(storedToken);
+    }
+  }, []);
+
+  useEffect(() => {
+    const storedId = localStorage.getItem("userId");
+    if (storedId) {
+      setUserId(storedId);
+    }
+  }, []);
+
+  const loadAllSongs = async () => {
+    try {
+      console.log(jwtToken);
+      const response = await axios.get(
+        "http://localhost:8080/api/v1/musify/audios",
+        {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        }
       );
+      const data = response.data;
+      setAllSongs(data);
+      setSongsLoaded(true);
+    } catch (error) {
+      console.error("Ошибка при получении всех песен:", error);
+    }
+  };
+
+  const loadUserSongs = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/v1/musify/audios/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        }
+      );
+      const data = response.data;
+      setUserSongs(data);
+      setSongsLoaded(true);
+    } catch (error) {
+      console.error("Ошибка при получении песен пользователя:", error);
+    }
   };
 
   const handleClick = (button) => {
@@ -26,8 +69,9 @@ export default function MusicBar() {
     if (button === "news") {
       loadAllSongs();
       setShowSongs(true);
-    } else {
-      setShowSongs(false);
+    } else if (button === "myMusic") {
+      loadUserSongs();
+      setShowSongs(true);
     }
   };
 
@@ -67,7 +111,7 @@ export default function MusicBar() {
         <Playlist
           showSongs={showSongs}
           songsLoaded={songsLoaded}
-          allSongs={allSongs}
+          allSongs={activeButton === "news" ? allSongs : userSongs}
           currentSongId={currentSongId}
           handlePlay={handlePlay}
         />

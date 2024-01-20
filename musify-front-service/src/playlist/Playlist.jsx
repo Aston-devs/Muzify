@@ -1,5 +1,4 @@
 import SongItem from "./SongItem";
-import "./Playlist.css";
 
 export default function Playlist({
   showSongs,

@@ -14,30 +14,30 @@ import ru.musify.musicservice.handler.exception.UserNotExistException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-  @ExceptionHandler(EntityNotFoundException.class)
-  @ResponseStatus(NOT_FOUND)
-  public ResponseData entityNotFoundException(EntityNotFoundException e) {
-    return ResponseData.builder()
-        .statusCode(NOT_FOUND.value())
-        .message(e.getMessage())
-        .build();
-  }
+    @ExceptionHandler(EntityNotFoundException.class)
+    @ResponseStatus(NOT_FOUND)
+    public ResponseData entityNotFoundException(EntityNotFoundException e) {
+        return ResponseData.builder()
+                .statusCode(NOT_FOUND.value())
+                .message(e.getMessage())
+                .build();
+    }
 
-  @ExceptionHandler(UserNotExistException.class)
-  @ResponseStatus(BAD_REQUEST)
-  public ResponseData userNotExistException(UserNotExistException e) {
-    return ResponseData.builder()
-        .statusCode(BAD_REQUEST.value())
-        .message(e.getMessage())
-        .build();
-  }
+    @ExceptionHandler(UserNotExistException.class)
+    @ResponseStatus(BAD_REQUEST)
+    public ResponseData userNotExistException(UserNotExistException e) {
+        return ResponseData.builder()
+                .statusCode(BAD_REQUEST.value())
+                .message(e.getMessage())
+                .build();
+    }
 
-  @ExceptionHandler(SongAlreadyAddedException.class)
-  @ResponseStatus(CONFLICT)
-  public ResponseData songAlreadyAddedException(SongAlreadyAddedException e) {
-    return ResponseData.builder()
-        .statusCode(CONFLICT.value())
-        .message(e.getMessage())
-        .build();
-  }
+    @ExceptionHandler(SongAlreadyAddedException.class)
+    @ResponseStatus(CONFLICT)
+    public ResponseData songAlreadyAddedException(SongAlreadyAddedException e) {
+        return ResponseData.builder()
+                .statusCode(CONFLICT.value())
+                .message(e.getMessage())
+                .build();
+    }
 }

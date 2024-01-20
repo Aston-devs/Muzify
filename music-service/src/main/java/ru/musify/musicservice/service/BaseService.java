@@ -5,13 +5,13 @@ import java.util.UUID;
 
 public interface BaseService<E, D> {
 
-  D findById(UUID id);
+    D findById(UUID id);
 
-  List<D> findAll();
+    List<D> findAll();
 
-  D save(E e);
+    D save(E e);
 
-  D update(E e);
+    D update(E e);
 
-  void removeById(UUID id);
+    void removeById(UUID id);
 }

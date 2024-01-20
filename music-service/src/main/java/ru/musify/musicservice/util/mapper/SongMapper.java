@@ -8,10 +8,10 @@ import ru.musify.musicservice.dto.SongDto;
 import ru.musify.musicservice.entity.Song;
 
 @Mapper(componentModel = SPRING, uses = {AuthorMapper.class,
-    CoverMapper.class}, unmappedTargetPolicy = IGNORE)
+        CoverMapper.class}, unmappedTargetPolicy = IGNORE)
 public interface SongMapper {
 
-  Song toEntity(SongDto dto);
+    Song toEntity(SongDto dto);
 
-  SongDto toDto(Song song);
+    SongDto toDto(Song song);
 }
