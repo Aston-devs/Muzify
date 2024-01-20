@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import PlayBtn from "../play_btn/PlayBtn";
 import "./SongItem.css";
 
-export default function SongItem({ key, song, currentSongId, onPlay }) {
+export default function SongItem({ song, currentSongId, onPlay }) {
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
