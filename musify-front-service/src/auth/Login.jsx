@@ -18,10 +18,16 @@ export default function Login() {
       console.log(res.data);
 
       if (res.status === 200) {
-        const { token, userId } = res.data;
+        const { token, userId, role } = res.data;
         localStorage.setItem("jwtToken", token);
         localStorage.setItem("userId", userId);
-        navigate("/dashboard");
+        localStorage.setItem("role", role);
+        console.log(role);
+        if (role === "[ROLE_ADMIN]") {
+          navigate("/admin");
+        } else {
+          navigate("/dashboard");
+        }
       }
     } catch (err) {
       alert(err);
@@ -29,7 +35,7 @@ export default function Login() {
   }
 
   function signUp() {
-    navigate("/register");
+    navigate("/signup");
   }
 
   return (

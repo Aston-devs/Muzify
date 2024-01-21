@@ -44,7 +44,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
             ServerHttpResponse response = exchange.getResponse();
             if (validator.isSecured.test(request)) {
                 if (!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
-                    throw new RuntimeException("missing authorization header");
+                    throw new RuntimeException("Missing authorization header");
                 }
                 String authHeader = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
                 if (authHeader != null && authHeader.startsWith("Bearer ")) {
@@ -64,8 +64,6 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                         throw new RuntimeException("un authorized access to application");
                     }
                 }
-
-
             }
             return chain.filter(exchange.mutate().request(request).response(response).build());
         }));

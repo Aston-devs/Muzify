@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Gabarito:wght@400..900&display=swap");
+
 .play-btn {
   display: flex;
   justify-content: center;
@@ -9,6 +11,7 @@
   cursor: pointer;
   color: #503e74;
   background-color: #fff;
+  font-family: "Gabarito", sans-serif;
   font-weight: bold;
 }
 

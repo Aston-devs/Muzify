@@ -1,0 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Gabarito:wght@400..900&display=swap");
+
+.no-songs-message {
+  text-align: center;
+  font-size: 1.5rem;
+  color: #503e74;
+  font-family: "Gabarito", sans-serif;
+  font-weight: bold;
+}

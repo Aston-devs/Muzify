@@ -14,7 +14,7 @@ import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/player")
+@RequestMapping("/api/v1/admin")
 public class UploadController {
     private final KafkaProducerService producerService;
     private final S3Service s3Service;

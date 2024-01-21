@@ -1,8 +1,14 @@
 import React, { useEffect, useState, useRef } from "react";
+import AddTrackBtn from "../play_btn/AddTrackBtn";
 import PlayBtn from "../play_btn/PlayBtn";
 import "./SongItem.css";
 
-export default function SongItem({ song, currentSongId, onPlay }) {
+export default function SongItem({
+  song,
+  currentSongId,
+  onPlay,
+  currentPlaylist,
+}) {
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -32,6 +38,7 @@ export default function SongItem({ song, currentSongId, onPlay }) {
       </div>
       <div className="song-controls">
         <PlayBtn handlePlay={handlePlay} isPlaying={isPlaying} />
+        <AddTrackBtn currentPlaylist={currentPlaylist} songId={song.id} />
       </div>
       <audio
         ref={audioRef}

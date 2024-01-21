@@ -72,7 +72,7 @@ export default function Registration() {
             <input
               type="password"
               id="password"
-              placeholder="Enter password"
+              placeholder="Enter Password"
               value={password}
               onChange={(event) => {
                 setPassword(event.target.value);

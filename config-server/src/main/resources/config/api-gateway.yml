@@ -30,8 +30,9 @@ spring:
             allowedOrigins: "http://localhost:3000"
             allowedMethods:
               - GET
-              - POST
               - PUT
+              - POST
+              - PATCH
               - DELETE
             allowedHeaders:
               - Authorization
@@ -46,6 +47,13 @@ spring:
           uri: lb://player-service
           predicates:
             - Path=/api/v1/player/**
+
+        - id: player-service
+          uri: lb://player-service
+          predicates:
+            - Path=/api/v1/admin/**
+          filters:
+            - AuthenticationFilter
 
         - id: music-service
           uri: lb://music-service

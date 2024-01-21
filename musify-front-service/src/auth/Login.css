@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Gabarito:wght@400..900&display=swap");
+
 .login-container {
   display: flex;
   height: 120vh;
@@ -36,10 +38,10 @@
 
 .login-btn {
   color: var(--2, #503e74);
-  font-family: "Roboto", sans-serif;
+  font-family: "Gabarito", sans-serif;
   font-size: 2.5rem;
   font-style: normal;
-  font-weight: 500;
+  font-weight: bold;
   line-height: normal;
 }
 
@@ -48,23 +50,30 @@
 }
 
 .login-form label {
+  font-family: "Gabarito", sans-serif;
+  font-weight: bold;
   display: block;
   margin-bottom: 5px;
   color: #555;
 }
 
 .login-form input {
+  font-family: "Gabarito", sans-serif;
+  font-weight: 400;
   width: 100%;
   padding: 8px;
   box-sizing: border-box;
   border: 1px solid #ccc;
   border-radius: 3px;
+  opacity: 0.6;
 }
 
 .login-form button {
+  font-family: "Gabarito", sans-serif;
+  font-weight: bold;
   width: 100%;
   padding: 10px;
-  background-color: #a086c6; /* Нежно фиолетовая кнопка */
+  background-color: #a086c6;
   color: white;
   border: none;
   border-radius: 5px;
@@ -76,10 +85,14 @@
 }
 
 .sign-up-container {
+  font-family: "Gabarito", sans-serif;
+  font-weight: 400;
   font-size: 15px;
 }
 
 .sign-up-btn {
+  font-family: "Gabarito", sans-serif;
+  font-weight: 400;
   border: none;
   background: none;
   text-decoration: underline;
