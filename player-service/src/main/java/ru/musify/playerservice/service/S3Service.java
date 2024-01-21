@@ -6,5 +6,6 @@ import reactor.core.publisher.Mono;
 
 public interface S3Service {
     void uploadFile(MultipartFile file, String objectKey);
+
     Mono<Resource> getFile(String objectKey);
 }
