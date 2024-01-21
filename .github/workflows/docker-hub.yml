@@ -3,7 +3,8 @@ name: Build and Push Docker Images
 on:
   push:
     branches:
-      - develop
+#      - develop
+      - feature/push_on_dockerhub
 
 jobs:
   build-and-push:
@@ -24,6 +25,12 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Find all .jar files in the repository
+        run: find . -name "*.jar"
+
+      - name: Find all application.yml files in the repository
+        run: find . -name "application.yml"
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5.1.0
