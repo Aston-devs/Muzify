@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +42,7 @@ public class KafkaMessageListener {
     @Loggable
     @KafkaListener(topics = "music-upload", groupId = "muzify-song")
     @Transactional(rollbackFor = JsonProcessingException.class)
+    @CacheEvict(value = "songsCache", allEntries = true)
     public void listen(String metaInfo) {
         log.info("Start saving {}", metaInfo);
 

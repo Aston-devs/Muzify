@@ -57,7 +57,7 @@ public class SongServiceImpl implements SongService {
     }
 
     @Override
-//    @Cacheable(value = "songsCache")
+    @Cacheable(value = "songsCache")
     public List<SongDto> findPaginatedSongs(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Song> paginatedSongs = repository.findAll(pageable);
