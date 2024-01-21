@@ -1,20 +1,4 @@
 spring:
-#  cloud:
-#    gateway:
-#      globalcors:
-#        cors-configurations:
-#          '[/**]':
-#            allowedOrigins: "http://localhost:3000"
-#            allowedMethods:
-#              - GET
-#              - POST
-#              - PUT
-#              - DELETE
-#            allowedHeaders:
-#              - Authorization
-#              - Content-Type
-#            allowCredentials: true
-
   application:
     name: api-gateway
   config:

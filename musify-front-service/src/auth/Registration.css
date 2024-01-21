@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Gabarito:wght@400..900&display=swap");
+
 .register-container {
   display: flex;
   height: 120vh;
@@ -36,10 +38,10 @@
 
 .register-btn {
   color: var(--2, #503e74);
-  font-family: "Roboto", sans-serif;
+  font-family: "Gabarito", sans-serif;
   font-size: 2.5rem;
   font-style: normal;
-  font-weight: 500;
+  font-weight: bold;
   line-height: normal;
 }
 
@@ -51,20 +53,27 @@
   display: block;
   margin-bottom: 5px;
   color: #555;
+  font-family: "Gabarito", sans-serif;
+  font-weight: bold;
 }
 
 .register-form input {
   width: 100%;
   padding: 8px;
+  font-family: "Gabarito", sans-serif;
+  font-weight: 400;
   box-sizing: border-box;
   border: 1px solid #ccc;
   border-radius: 3px;
+  opacity: 0.6;
 }
 
 .register-form button {
   width: 100%;
   padding: 10px;
   background-color: #a086c6;
+  font-family: "Gabarito", sans-serif;
+  font-weight: bold;
   color: white;
   border: none;
   border-radius: 5px;
@@ -77,6 +86,8 @@
 
 .login-redirect-container {
   font-size: 15px;
+  font-family: "Gabarito", sans-serif;
+  font-weight: 400;
 }
 
 .login-redirect-btn {
@@ -85,6 +96,8 @@
   text-decoration: underline;
   cursor: pointer;
   transition: color 0.3s ease;
+  font-family: "Gabarito", sans-serif;
+  font-weight: 400;
 }
 
 .login-redirect-btn:hover {

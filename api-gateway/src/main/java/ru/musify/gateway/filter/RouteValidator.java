@@ -17,7 +17,7 @@ public class RouteValidator {
     );
 
     public static final List<String> ADMIN_API_ENDPOINTS = List.of(
-            "/api/v1/player/upload"
+            "/api/v1/admin/upload"
     );
 
     public Predicate<ServerHttpRequest> isAdminRout =

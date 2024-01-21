@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Gabarito:wght@400..900&display=swap");
+
 .header-container {
   margin: 0rem 5.25rem;
   display: flex;
@@ -27,7 +29,7 @@
   width: 17.1875rem;
   height: 5.5rem;
   color: var(--color, #503e74);
-  font-family: Gabarito;
+  font-family: "Gabarito", sans-serif;
   font-size: 1.5rem;
   font-weight: 400;
   line-height: normal;

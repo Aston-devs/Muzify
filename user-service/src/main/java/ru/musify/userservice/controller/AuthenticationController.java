@@ -1,5 +1,6 @@
 package ru.musify.userservice.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import ru.musify.userservice.services.AuthenticationService;
 import ru.musify.userservice.services.JwtService;
 import ru.musify.userservice.services.impl.KafkaProducerService;
 import ru.musify.userservice.services.impl.UserDetailsServiceImpl;
+import ru.musify.userservice.util.ErrorMessage;
 import ru.musify.userservice.valid.UserValidator;
 
 import java.util.Collection;
@@ -48,17 +50,19 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signUp(@RequestBody SignUpRequest request, BindingResult bindingResult) {
+    public ResponseEntity<?> signUp(@RequestBody @Valid SignUpRequest request, BindingResult bindingResult) {
         userValidator.validate(request, bindingResult);
         if (bindingResult.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User with this username is already registered");
+            String errorMessage = ErrorMessage.bindingResultHasErrors(bindingResult);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
         }
         authenticationService.signup(request);
         String username = request.username();
         String userId = String.valueOf(getUserID(username));
-        String token = jwtService.generateToken(username, UUID.fromString(userId), getUserRole(username));
+        Collection<? extends GrantedAuthority> role = getUserRole(username);
+        String token = jwtService.generateToken(username, UUID.fromString(userId), role);
         kafkaProducerService.sendUserIdToTopic(new UserMetainfo(userId));
-        return ResponseEntity.ok(new ResponseData(token, userId));
+        return ResponseEntity.ok(new ResponseData(token, userId, role.toString()));
     }
 
     @PostMapping("/login")
@@ -73,8 +77,9 @@ public class AuthenticationController {
         }
         String username = request.username();
         String userId = String.valueOf(getUserID(username));
-        String token = jwtService.generateToken(username, UUID.fromString(userId), getUserRole(username));
-        return ResponseEntity.ok(new ResponseData(token, userId));
+        Collection<? extends GrantedAuthority> role = getUserRole(username);
+        String token = jwtService.generateToken(username, UUID.fromString(userId), role);
+        return ResponseEntity.ok(new ResponseData(token, userId, role.toString()));
     }
 
     @GetMapping("/validate")

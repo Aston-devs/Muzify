@@ -7,11 +7,12 @@ export default function MusicBar() {
   const [userId, setUserId] = useState("");
   const [allSongs, setAllSongs] = useState([]);
   const [jwtToken, setJwtToken] = useState("");
-  const [userSongs, setUserSongs] = useState("");
+  const [userSongs, setUserSongs] = useState([]);
   const [showSongs, setShowSongs] = useState(false);
   const [songsLoaded, setSongsLoaded] = useState(false);
-  const [activeButton, setActiveButton] = useState(null);
+  const [activeButton, setActiveButton] = useState(false);
   const [currentSongId, setCurrentSongId] = useState(null);
+  const [currentPlaylist, setCurrentPlaylist] = useState("");
 
   useEffect(() => {
     const storedToken = localStorage.getItem("jwtToken");
@@ -55,7 +56,7 @@ export default function MusicBar() {
           },
         }
       );
-      const data = response.data;
+      const data = response.data.songs;
       setUserSongs(data);
       setSongsLoaded(true);
     } catch (error) {
@@ -68,9 +69,11 @@ export default function MusicBar() {
     if (button === "news") {
       loadAllSongs();
       setShowSongs(true);
+      setCurrentPlaylist("all");
     } else if (button === "myMusic") {
       loadUserSongs();
       setShowSongs(true);
+      setCurrentPlaylist("user");
     }
   };
 
@@ -81,10 +84,6 @@ export default function MusicBar() {
       setCurrentSongId(songId);
     }
   };
-
-  useEffect(() => {
-    loadAllSongs();
-  }, []);
 
   return (
     <>
@@ -113,6 +112,7 @@ export default function MusicBar() {
           allSongs={activeButton === "news" ? allSongs : userSongs}
           currentSongId={currentSongId}
           handlePlay={handlePlay}
+          currentPlaylist={currentPlaylist}
         />
       </div>
     </>
