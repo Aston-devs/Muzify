@@ -3,8 +3,7 @@ name: Build and Push Docker Images
 on:
   push:
     branches:
-#      - develop
-      - feature/push_on_dockerhub
+      - develop
 
 jobs:
   build-and-push:
@@ -52,4 +51,5 @@ jobs:
           context: ./${{ matrix.service }}/
           file: ./${{ matrix.service }}/Dockerfile
           push: true
+          provenance: mode=max
           tags: muzify/${{ matrix.service }}:latest
