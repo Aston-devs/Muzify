@@ -1,7 +1,6 @@
 package ru.musify.userservice.dto;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 
 public record SignUpRequest(@Email(message = "Apparently the email address is incorrect") String email,
