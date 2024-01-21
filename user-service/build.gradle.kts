@@ -6,8 +6,9 @@ val lombokMapstructBindingVersion = "0.2.0"
 dependencies {
 
     implementation("com.auth0:java-jwt:4.4.0")
-    implementation ("io.jsonwebtoken:jjwt-api:0.11.5")
     implementation("org.flywaydb:flyway-core")
+    implementation ("io.jsonwebtoken:jjwt-api:0.11.5")
+    implementation("org.springframework.kafka:spring-kafka")
     implementation("org.projectlombok:lombok:$lombokVersion")
     implementation("org.mapstruct:mapstruct:$mapstructVersion")
     implementation("org.springframework.boot:spring-boot-starter-web")

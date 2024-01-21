@@ -1,19 +1,19 @@
-import "./App.css";
-import React from "react";
-import Header from "../header/Header.jsx";
-import Player from "../player/Player.jsx";
-import MusicBar from "../music bar/MusicBar.jsx";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Register from "../auth/Registration.jsx";
+import Login from "../auth/Login.jsx";
+
+import Home from "./Home";
 
 export default function App() {
   return (
-    <>
-      <div className="App">
-        <header className="App-header">
-          <Header />
-          <Player />
-          <MusicBar />
-        </header>
-      </div>
-    </>
+    <div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/dashboard" element={<Home />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 }

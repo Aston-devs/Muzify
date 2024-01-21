@@ -10,9 +10,9 @@ import lombok.Builder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseData {
 
-  @JsonProperty("statusCode")
-  private int statusCode;
+    @JsonProperty("statusCode")
+    private int statusCode;
 
-  @JsonProperty("message")
-  private String message;
+    @JsonProperty("message")
+    private String message;
 }

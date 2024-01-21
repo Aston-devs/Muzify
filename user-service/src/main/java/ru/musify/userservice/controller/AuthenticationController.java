@@ -7,17 +7,20 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.musify.userservice.dto.LoginRequest;
+import ru.musify.userservice.dto.ResponseData;
 import ru.musify.userservice.dto.SignUpRequest;
+import ru.musify.userservice.dto.UserMetainfo;
 import ru.musify.userservice.services.AuthenticationService;
 import ru.musify.userservice.services.JwtService;
+import ru.musify.userservice.services.impl.KafkaProducerService;
 import ru.musify.userservice.services.impl.UserDetailsServiceImpl;
+import ru.musify.userservice.valid.UserValidator;
 
 import java.util.Collection;
 import java.util.UUID;
-
 
 @RestController
 @RequiredArgsConstructor
@@ -26,9 +29,13 @@ public class AuthenticationController {
 
     private final JwtService jwtService;
 
+    private final UserValidator userValidator;
+
     private final UserDetailsServiceImpl userDetailsService;
 
     private final AuthenticationService authenticationService;
+
+    private final KafkaProducerService kafkaProducerService;
 
     private final AuthenticationManager authenticationManager;
 
@@ -41,9 +48,17 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<String> registration(@RequestBody SignUpRequest request) {
+    public ResponseEntity<?> signUp(@RequestBody SignUpRequest request, BindingResult bindingResult) {
+        userValidator.validate(request, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User with this username is already registered");
+        }
         authenticationService.signup(request);
-        return ResponseEntity.ok(jwtService.generateToken(request.username(), getUserID(request.username()), getUserRole(request.username())));
+        String username = request.username();
+        String userId = String.valueOf(getUserID(username));
+        String token = jwtService.generateToken(username, UUID.fromString(userId), getUserRole(username));
+        kafkaProducerService.sendUserIdToTopic(new UserMetainfo(userId));
+        return ResponseEntity.ok(new ResponseData(token, userId));
     }
 
     @PostMapping("/login")
@@ -56,7 +71,10 @@ public class AuthenticationController {
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect credentials!");
         }
-        return ResponseEntity.ok(jwtService.generateToken(request.username(), getUserID(request.username()), getUserRole(request.username())));
+        String username = request.username();
+        String userId = String.valueOf(getUserID(username));
+        String token = jwtService.generateToken(username, UUID.fromString(userId), getUserRole(username));
+        return ResponseEntity.ok(new ResponseData(token, userId));
     }
 
     @GetMapping("/validate")
@@ -64,5 +82,4 @@ public class AuthenticationController {
         jwtService.validateTokenAndRetrieveClaim(token);
         return "Token is valid";
     }
-
 }

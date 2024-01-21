@@ -5,5 +5,5 @@ import ru.musify.musicservice.entity.Author;
 
 public interface AuthorService extends BaseService<Author, AuthorDto> {
 
-  Author findByName(String author);
+    Author findByName(String author);
 }

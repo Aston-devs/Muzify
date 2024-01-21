@@ -24,6 +24,19 @@ spring:
     name: api-gateway
   cloud:
     gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:3000"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+            allowedHeaders:
+              - Authorization
+              - Content-Type
+            allowCredentials: true
       discovery:
         locator:
           enabled: true
@@ -33,8 +46,6 @@ spring:
           uri: lb://player-service
           predicates:
             - Path=/api/v1/player/**
-          filters:
-            - AuthenticationFilter
 
         - id: music-service
           uri: lb://music-service

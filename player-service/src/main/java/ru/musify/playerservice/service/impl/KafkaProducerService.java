@@ -10,6 +10,7 @@ import ru.musify.playerservice.dto.SongMetainfo;
 @Service
 @RequiredArgsConstructor
 public class KafkaProducerService {
+
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
     public void sendSongMetainfoToTopic(SongMetainfo songMetainfo) {

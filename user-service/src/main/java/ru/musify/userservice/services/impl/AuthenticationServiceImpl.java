@@ -1,6 +1,8 @@
 package ru.musify.userservice.services.impl;
 
+import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,6 +12,7 @@ import ru.musify.userservice.model.User;
 import ru.musify.userservice.repository.UserRepository;
 import ru.musify.userservice.services.AuthenticationService;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -20,7 +23,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final PasswordEncoder passwordEncoder;
 
-    @Transactional
+    @Transactional(rollbackFor = ValidationException.class)
     public User signup(SignUpRequest request) {
         User user = mapper.toUser(request);
         user.setRole("ROLE_USER");

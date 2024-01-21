@@ -10,7 +10,7 @@ import ru.musify.musicservice.entity.Cover;
 @Mapper(componentModel = SPRING, unmappedTargetPolicy = IGNORE)
 public interface CoverMapper {
 
-  Cover toEntity(CoverDto dto);
+    Cover toEntity(CoverDto dto);
 
-  CoverDto toDto(Cover cover);
+    CoverDto toDto(Cover cover);
 }

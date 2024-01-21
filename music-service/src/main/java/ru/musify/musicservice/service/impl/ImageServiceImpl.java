@@ -3,6 +3,7 @@ package ru.musify.musicservice.service.impl;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,55 +23,55 @@ import ru.musify.musicservice.util.mapper.ImageMapper;
 @Transactional(readOnly = true)
 public class ImageServiceImpl implements ImageService {
 
-  private final ImageRepository repository;
+    private final ImageRepository repository;
 
-  private final ImageMapper imageMapper;
+    private final ImageMapper imageMapper;
 
-  @Override
-  public ImageDto findById(UUID id) {
-    Image image = repository.findById(id)
-        .orElseThrow(() -> {
-          log.debug("Could not find image with id {}", id);
-          return new EntityNotFoundException("Image not found with id " + id);
-        });
-    log.info("Image found with id {}", id);
+    @Override
+    public ImageDto findById(UUID id) {
+        Image image = repository.findById(id)
+                .orElseThrow(() -> {
+                    log.debug("Could not find image with id {}", id);
+                    return new EntityNotFoundException("Image not found with id " + id);
+                });
+        log.info("Image found with id {}", id);
 
-    return imageMapper.toDto(image);
-  }
+        return imageMapper.toDto(image);
+    }
 
-  @Override
-  public List<ImageDto> findAll() {
-    List<Image> allImages = repository.findAll();
-    log.info("Found all images");
+    @Override
+    public List<ImageDto> findAll() {
+        List<Image> allImages = repository.findAll();
+        log.info("Found all images");
 
-    return allImages.stream()
-        .map(imageMapper::toDto)
-        .collect(Collectors.toList());
-  }
+        return allImages.stream()
+                .map(imageMapper::toDto)
+                .collect(Collectors.toList());
+    }
 
-  @Override
-  @Transactional
-  public ImageDto save(Image image) {
-    Image savedImage = repository.save(image);
-    log.info("Saved image with id {}", savedImage.getId());
+    @Override
+    @Transactional
+    public ImageDto save(Image image) {
+        Image savedImage = repository.save(image);
+        log.info("Saved image with id {}", savedImage.getId());
 
-    return imageMapper.toDto(savedImage);
-  }
+        return imageMapper.toDto(savedImage);
+    }
 
-  @Override
-  @Transactional
-  public ImageDto update(Image image) {
-    Image updatedImage = repository.save(image);
-    log.info("Image updated with id {}", updatedImage.getId());
+    @Override
+    @Transactional
+    public ImageDto update(Image image) {
+        Image updatedImage = repository.save(image);
+        log.info("Image updated with id {}", updatedImage.getId());
 
-    return imageMapper.toDto(updatedImage);
-  }
+        return imageMapper.toDto(updatedImage);
+    }
 
-  @Override
-  @Transactional
-  public void removeById(UUID id) {
-    repository.deleteById(id);
+    @Override
+    @Transactional
+    public void removeById(UUID id) {
+        repository.deleteById(id);
 
-    log.info("Removed image with id {}", id);
-  }
+        log.info("Removed image with id {}", id);
+    }
 }

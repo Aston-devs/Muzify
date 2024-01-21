@@ -10,7 +10,7 @@ import ru.musify.musicservice.entity.Author;
 @Mapper(componentModel = SPRING, uses = ImageMapper.class, unmappedTargetPolicy = IGNORE)
 public interface AuthorMapper {
 
-  Author toEntity(AuthorDto dto);
+    Author toEntity(AuthorDto dto);
 
-  AuthorDto toDto(Author author);
+    AuthorDto toDto(Author author);
 }

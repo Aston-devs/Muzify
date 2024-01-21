@@ -10,7 +10,7 @@ import ru.musify.musicservice.entity.User;
 @Mapper(componentModel = SPRING, uses = {SongMapper.class}, unmappedTargetPolicy = IGNORE)
 public interface UserMapper {
 
-  User toEntity(UserDto dto);
+    User toEntity(UserDto dto);
 
-  UserDto toDto(User user);
+    UserDto toDto(User user);
 }

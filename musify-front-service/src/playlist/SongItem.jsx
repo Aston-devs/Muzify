@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import PlayBtn from "../play_btn/PlayBtn";
 import "./SongItem.css";
 
-export default function SongItem({ key, song, currentSongId, onPlay }) {
+export default function SongItem({ song, currentSongId, onPlay }) {
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -35,7 +35,7 @@ export default function SongItem({ key, song, currentSongId, onPlay }) {
       </div>
       <audio
         ref={audioRef}
-        src={`http://localhost:8081/api/v1/player/play/${song.url}`}
+        src={`http://localhost:8080/api/v1/player/play/${song.url}`}
         preload="none"
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}

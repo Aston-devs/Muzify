@@ -13,9 +13,11 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -35,34 +37,34 @@ import lombok.ToString;
 @Table(name = "song", schema = "music_service")
 public class Song extends BaseEntity {
 
-  @ToString.Include
-  @EqualsAndHashCode.Include
-  @Id
-  @GeneratedValue(strategy = GenerationType.UUID)
-  private UUID id;
+    @ToString.Include
+    @EqualsAndHashCode.Include
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
-  @Column(name = "title", nullable = false, length = 150)
-  private String title;
+    @Column(name = "title", nullable = false, length = 150)
+    private String title;
 
-  @ManyToOne
-  @JoinColumn(name = "author_id")
-  private Author author;
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private Author author;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "cover_id", unique = true)
-  private Cover cover;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "cover_id", unique = true)
+    private Cover cover;
 
-  @Column(name = "genre")
-  @Enumerated(EnumType.STRING)
-  private Genre genre;
+    @Column(name = "genre")
+    @Enumerated(EnumType.STRING)
+    private Genre genre;
 
-  @Column(name = "url", nullable = false)
-  private String url;
+    @Column(name = "url", nullable = false)
+    private String url;
 
-  @Column(name = "release_date")
-  private LocalDateTime releaseDate;
+    @Column(name = "release_date")
+    private LocalDateTime releaseDate;
 
-  @ManyToMany(mappedBy = "userSongs")
-  private List<User> users;
+    @ManyToMany(mappedBy = "userSongs")
+    private List<User> users;
 
 }

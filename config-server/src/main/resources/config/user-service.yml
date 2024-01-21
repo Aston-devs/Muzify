@@ -12,6 +12,8 @@ eureka:
     hostname: localhost
 
 spring:
+  kafka:
+    bootstrap-servers: localhost:9092
   datasource:
     name: user_db
     url: jdbc:postgresql://localhost:54320/user_db

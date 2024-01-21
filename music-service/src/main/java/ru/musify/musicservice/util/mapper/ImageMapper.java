@@ -10,7 +10,7 @@ import ru.musify.musicservice.entity.Image;
 @Mapper(componentModel = SPRING, unmappedTargetPolicy = IGNORE)
 public interface ImageMapper {
 
-  Image toEntity(ImageDto dto);
+    Image toEntity(ImageDto dto);
 
-  ImageDto toDto(Image image);
+    ImageDto toDto(Image image);
 }
