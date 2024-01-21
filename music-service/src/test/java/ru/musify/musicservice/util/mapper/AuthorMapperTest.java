@@ -19,6 +19,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AuthorMapperTest {
+
     private Author expAuthor;
     private AuthorDto expAuthorDto;
 
