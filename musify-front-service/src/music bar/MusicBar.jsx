@@ -29,7 +29,6 @@ export default function MusicBar() {
 
   const loadAllSongs = async () => {
     try {
-      console.log(jwtToken);
       const response = await axios.get(
         "http://localhost:8080/api/v1/musify/audios",
         {
