@@ -43,11 +43,11 @@ class SongServiceImplTest {
     private Author expAuthor;
     private Cover expCover;
     private CoverDto expCoverDto;
-    private SongDto expSongDto;
-
 
     @MockBean
+
     private SongMapper songMapper;
+    private SongDto expSongDto;
 
     @MockBean
     private SongRepository songRepository;
