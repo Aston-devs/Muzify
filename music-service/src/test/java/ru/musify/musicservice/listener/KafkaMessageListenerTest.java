@@ -34,22 +34,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import ru.musify.musicservice.dto.SongDto;
-import ru.musify.musicservice.dto.ImageDto;
-import ru.musify.musicservice.dto.CoverDto;
-import ru.musify.musicservice.dto.AuthorDto;
-import ru.musify.musicservice.dto.SongMetaInfo;
-import ru.musify.musicservice.service.SongService;
-import ru.musify.musicservice.service.CoverService;
-import ru.musify.musicservice.service.AuthorService;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-
 @ContextConfiguration(classes = {KafkaMessageListener.class})
 @ExtendWith(SpringExtension.class)
 class KafkaMessageListenerTest {
@@ -142,9 +126,6 @@ class KafkaMessageListenerTest {
         when(coverService.save(Mockito.any())).thenReturn(expCoverDto);
         when(authorService.save(Mockito.any())).thenReturn(expAuthorDto);
         when(authorService.findByName(Mockito.any())).thenReturn(expAuthor);
-        when(authorService.save(Mockito.any())).thenReturn(expAuthorDto);
-        when(authorService.findByName(Mockito.any())).thenReturn(expAuthor);
-        when(coverService.save(Mockito.any())).thenReturn(expCoverDto);
         when(objectMapper.readValue(Mockito.<String>any(), Mockito.<Class<SongMetaInfo>>any())).thenReturn(
                 new SongMetaInfo("Dr", "JaneDoe", "https://example.org/example", "https://example.org/example"));
 
@@ -178,15 +159,5 @@ class KafkaMessageListenerTest {
 
         assertThrows(IllegalArgumentException.class, () -> kafkaMessageListener.listenUserTopic("User Metainfo"));
         verify(objectMapper).readValue(Mockito.<String>any(), Mockito.<Class<UserMetainfo>>any());
-        when(songService.save(Mockito.any())).thenReturn(expSongDto);
-        when(authorService.save(Mockito.any())).thenReturn(expAuthorDto);
-        when(authorService.findByName(Mockito.any())).thenReturn(expAuthor);
-        when(coverService.save(Mockito.any())).thenThrow(new IllegalArgumentException("Start saving {}"));
-        when(objectMapper.readValue(Mockito.<String>any(), Mockito.<Class<SongMetaInfo>>any())).thenReturn(
-                new SongMetaInfo("Dr", "JaneDoe", "https://example.org/example", "https://example.org/example"));
-        assertThrows(IllegalArgumentException.class, () -> kafkaMessageListener.listen("Meta Info"));
-        verify(objectMapper).readValue(Mockito.<String>any(), Mockito.<Class<SongMetaInfo>>any());
-        verify(authorService).findByName(Mockito.any());
-        verify(coverService).save(Mockito.any());
     }
 }
