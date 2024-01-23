@@ -21,18 +21,36 @@ import ru.musify.musicservice.service.SongService;
 import ru.musify.musicservice.service.UserService;
 import ru.musify.musicservice.util.mapper.UserMapper;
 
+/**
+ * Controller class for managing music-related operations.
+ */
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/musify/audios")
 public class MusicController {
 
+    /**
+     * Service for managing songs.
+     */
     private final SongService songService;
 
+    /**
+     * Service for managing users.
+     */
     private final UserService userService;
 
+    /**
+     * Mapper for converting UserDto objects to User entities and vice versa.
+     */
     private final UserMapper userMapper;
 
+    /**
+     * Retrieves all songs with pagination.
+     * @param page - the page number
+     * @param size - the page size
+     * @return a list of SongDto objects
+     */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<SongDto> getAllSongs(
@@ -41,6 +59,11 @@ public class MusicController {
         return songService.findPaginatedSongs(page, size);
     }
 
+    /**
+     * Retrieves songs for a specific user.
+     * @param userId - the ID of the user
+     * @return a UserSongsDto object containing the user's songs
+     */
     @GetMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public UserSongsDto getUserSongs(@PathVariable UUID userId) {
@@ -56,6 +79,12 @@ public class MusicController {
         return userSongsDto;
     }
 
+    /**
+     * Adds a song to a user's collection.
+     * @param userId - the ID of the user
+     * @param songId - the ID of the song to add
+     * @return the added SongDto object
+     */
     @PatchMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public SongDto addSongToUser(@PathVariable UUID userId,
@@ -79,6 +108,12 @@ public class MusicController {
         return songDto;
     }
 
+    /**
+     * Removes a song from a user's collection.
+     * @param userId - the ID of the user
+     * @param songId - the ID of the song to remove
+     * @return a ResponseData object indicating the status of the operation
+     */
     @DeleteMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseData removeSongFromUser(@PathVariable UUID userId,
@@ -101,6 +136,10 @@ public class MusicController {
                 .build();
     }
 
+    /**
+     * Checks if a user exists.
+     * @param id - the ID of the user
+     */
     public void isUserExists(UUID id) {
         if (!userService.isUserExists(id)) {
             log.debug("User does not exist with id {}", id);

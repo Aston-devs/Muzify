@@ -11,9 +11,18 @@ import ru.musify.musicservice.handler.exception.EntityNotFoundException;
 import ru.musify.musicservice.handler.exception.SongAlreadyAddedException;
 import ru.musify.musicservice.handler.exception.UserNotExistException;
 
+/**
+ * GlobalExceptionHandler class to handle exceptions globally in the application.
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    /**
+     * Handles EntityNotFoundException and returns a ResponseData with NOT_FOUND status.
+     *
+     * @param e The EntityNotFoundException object.
+     * @return ResponseData with status code and error message.
+     */
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(NOT_FOUND)
     public ResponseData entityNotFoundException(EntityNotFoundException e) {
@@ -23,6 +32,12 @@ public class GlobalExceptionHandler {
                 .build();
     }
 
+    /**
+     * Handles UserNotExistException and returns a ResponseData with BAD_REQUEST status.
+     *
+     * @param e The UserNotExistException object.
+     * @return ResponseData with status code and error message.
+     */
     @ExceptionHandler(UserNotExistException.class)
     @ResponseStatus(BAD_REQUEST)
     public ResponseData userNotExistException(UserNotExistException e) {
@@ -32,6 +47,12 @@ public class GlobalExceptionHandler {
                 .build();
     }
 
+    /**
+     * Handles SongAlreadyAddedException and returns a ResponseData with CONFLICT status.
+     *
+     * @param e The SongAlreadyAddedException object.
+     * @return ResponseData with status code and error message.
+     */
     @ExceptionHandler(SongAlreadyAddedException.class)
     @ResponseStatus(CONFLICT)
     public ResponseData songAlreadyAddedException(SongAlreadyAddedException e) {

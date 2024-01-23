@@ -22,6 +22,9 @@ import ru.musify.musicservice.repository.SongRepository;
 import ru.musify.musicservice.service.SongService;
 import ru.musify.musicservice.util.mapper.SongMapper;
 
+/**
+ * SongServiceImpl class providing implementation for SongService.
+ */
 @Slf4j
 @Loggable
 @Service
@@ -29,10 +32,23 @@ import ru.musify.musicservice.util.mapper.SongMapper;
 @Transactional(readOnly = true)
 public class SongServiceImpl implements SongService {
 
+    /**
+     * The repository for accessing and managing Song entities in the database.
+     */
     private final SongRepository repository;
 
+    /**
+     * The mapper for converting Song entities to DTOs and vice versa.
+     */
     private final SongMapper songMapper;
 
+    /**
+     * Retrieves a song by its ID.
+     *
+     * @param id The ID of the song to be retrieved.
+     * @return The DTO representation of the song.
+     * @throws EntityNotFoundException if the song with the specified ID is not found.
+     */
     @Override
     @Cacheable(value = "song", key = "#id", condition = "#result != null")
     public SongDto findById(UUID id) {
@@ -46,6 +62,11 @@ public class SongServiceImpl implements SongService {
         return songMapper.toDto(song);
     }
 
+    /**
+     * Retrieves all songs.
+     *
+     * @return A list of DTO representations for all songs.
+     */
     @Override
     public List<SongDto> findAll() {
         List<Song> allSongs = repository.findAll();
@@ -56,6 +77,13 @@ public class SongServiceImpl implements SongService {
                 .toList();
     }
 
+    /**
+     * Retrieves paginated songs.
+     *
+     * @param page The page number.
+     * @param size The size of each page.
+     * @return A list of DTO representations of paginated songs.
+     */
     @Override
     @Cacheable(value = "songsCache")
     public List<SongDto> findPaginatedSongs(int page, int size) {
@@ -68,6 +96,12 @@ public class SongServiceImpl implements SongService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Saves a song.
+     *
+     * @param song The song to be saved.
+     * @return The DTO representation of the saved song.
+     */
     @Override
     @Transactional
     public SongDto save(Song song) {
@@ -77,6 +111,12 @@ public class SongServiceImpl implements SongService {
         return songMapper.toDto(savedSong);
     }
 
+    /**
+     * Updates a song.
+     *
+     * @param song The song to be updated.
+     * @return The DTO representation of the updated song.
+     */
     @Override
     @Transactional
     @CachePut(value = "song", key = "#song.id")
@@ -87,6 +127,11 @@ public class SongServiceImpl implements SongService {
         return songMapper.toDto(updatedSong);
     }
 
+    /**
+     * Removes a song by its ID.
+     *
+     * @param id The ID of the song to be removed.
+     */
     @Override
     @Transactional
     @CacheEvict(value = "song", key = "#id")

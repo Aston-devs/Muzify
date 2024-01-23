@@ -24,6 +24,9 @@ import ru.musify.musicservice.service.CoverService;
 import ru.musify.musicservice.service.SongService;
 import ru.musify.musicservice.service.UserService;
 
+/**
+ * KafkaMessageListener class to listen to Kafka topics and process messages.
+ */
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -39,6 +42,11 @@ public class KafkaMessageListener {
 
     private final ObjectMapper objectMapper;
 
+    /**
+     * Listens to the "music-upload" Kafka topic and processes the metaInfo message.
+     *
+     * @param metaInfo The meta information of the song to be processed.
+     */
     @Loggable
     @KafkaListener(topics = "music-upload", groupId = "muzify-song")
     @Transactional(rollbackFor = JsonProcessingException.class)
@@ -75,6 +83,11 @@ public class KafkaMessageListener {
         }
     }
 
+    /**
+     * Listens to the "user-creator" Kafka topic and processes the userMetainfo message.
+     *
+     * @param userMetainfo The meta-information of the user to be processed.
+     */
     @Loggable
     @KafkaListener(topics = "user-creator", groupId = "muzify-song")
     @Transactional(rollbackFor = JsonProcessingException.class)

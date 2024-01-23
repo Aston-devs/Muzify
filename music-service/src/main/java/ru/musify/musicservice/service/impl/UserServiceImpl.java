@@ -20,6 +20,9 @@ import ru.musify.musicservice.service.UserService;
 import ru.musify.musicservice.util.mapper.SongMapper;
 import ru.musify.musicservice.util.mapper.UserMapper;
 
+/**
+ * UserServiceImpl class providing implementation for UserService.
+ */
 @Slf4j
 @Loggable
 @Service
@@ -27,12 +30,28 @@ import ru.musify.musicservice.util.mapper.UserMapper;
 @Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
+    /**
+     * The repository for accessing and managing User entities in the database.
+     */
     private final UserRepository repository;
 
+    /**
+     * The mapper for converting User entities to DTOs and vice versa.
+     */
     private final UserMapper userMapper;
 
+    /**
+     * The mapper for converting Song entities to DTOs and vice versa.
+     */
     private final SongMapper songMapper;
 
+    /**
+     * Retrieves a user by their ID.
+     *
+     * @param id The ID of the user to be retrieved.
+     * @return The DTO representation of the user.
+     * @throws EntityNotFoundException if the user with the specified ID is not found.
+     */
     @Override
     public UserDto findById(UUID id) {
         User user = repository.findById(id).orElseThrow(() -> {
@@ -44,6 +63,11 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(user);
     }
 
+    /**
+     * Retrieves all users.
+     *
+     * @return A list of DTO representations of all users.
+     */
     @Override
     public List<UserDto> findAll() {
         List<User> allSongs = repository.findAll();
@@ -54,6 +78,13 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Saves a user.
+     *
+     * @param user The user to be saved.
+     * @return The DTO representation of the saved user.
+     * @throws UserNotExistException if the user does not have an ID.
+     */
     @Override
     @Transactional
     public UserDto save(User user) {
@@ -67,6 +98,12 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(savedUser);
     }
 
+    /**
+     * Updates a user.
+     *
+     * @param user The user to be updated.
+     * @return The DTO representation of the updated user.
+     */
     @Override
     @Transactional
     public UserDto update(User user) {
@@ -76,6 +113,11 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(savedUser);
     }
 
+    /**
+     * Removes a user by their ID.
+     *
+     * @param id The ID of the user to be removed.
+     */
     @Override
     @Transactional
     public void removeById(UUID id) {
@@ -84,11 +126,23 @@ public class UserServiceImpl implements UserService {
         log.info("Removed user with id {}", id);
     }
 
+    /**
+     * Checks if a user with the specified ID exists.
+     *
+     * @param id The ID of the user to be checked.
+     * @return true if the user exists, false otherwise.
+     */
     @Override
     public boolean isUserExists(UUID id) {
         return repository.existsById(id);
     }
 
+    /**
+     * Finds all songs associated with a user by their ID.
+     *
+     * @param id The ID of the user.
+     * @return A list of songs (SongDto).
+     */
     @Override
     public List<SongDto> findSongsByUserId(UUID id) {
         List<Song> userSongs = repository.findSongsByUserId(id);

@@ -12,6 +12,9 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+/**
+ * Represents a base entity with common fields for other entities.
+ */
 @Getter
 @Setter
 @AllArgsConstructor
@@ -19,10 +22,16 @@ import org.hibernate.annotations.UpdateTimestamp;
 @MappedSuperclass
 public abstract class BaseEntity {
 
+    /**
+     * The timestamp when the entity was created.
+     */
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    /**
+     * The timestamp when the entity was last updated.
+     */
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;

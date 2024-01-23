@@ -16,6 +16,9 @@ import ru.musify.musicservice.repository.AuthorRepository;
 import ru.musify.musicservice.service.AuthorService;
 import ru.musify.musicservice.util.mapper.AuthorMapper;
 
+/**
+ * AuthorServiceImpl class providing implementation for AuthorService.
+ */
 @Slf4j
 @Loggable
 @Service
@@ -27,6 +30,13 @@ public class AuthorServiceImpl implements AuthorService {
 
     private final AuthorMapper authorMapper;
 
+    /**
+     * Retrieves an author by their ID.
+     *
+     * @param id The ID of the author to be retrieved.
+     * @return The DTO representation of the author.
+     * @throws EntityNotFoundException if the author with the specified ID is not found.
+     */
     @Override
     public AuthorDto findById(UUID id) {
         Author author = repository.findById(id)
@@ -39,6 +49,11 @@ public class AuthorServiceImpl implements AuthorService {
         return authorMapper.toDto(author);
     }
 
+    /**
+     * Retrieves all authors.
+     *
+     * @return A list of DTO representations for all authors.
+     */
     @Override
     public List<AuthorDto> findAll() {
         List<Author> allAuthors = repository.findAll();
@@ -49,6 +64,12 @@ public class AuthorServiceImpl implements AuthorService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Saves an author.
+     *
+     * @param author The author to be saved.
+     * @return The DTO representation of the saved author.
+     */
     @Override
     @Transactional
     public AuthorDto save(Author author) {
@@ -58,6 +79,12 @@ public class AuthorServiceImpl implements AuthorService {
         return authorMapper.toDto(savedAuthor);
     }
 
+    /**
+     * Updates an author.
+     *
+     * @param author The author to be updated.
+     * @return The DTO representation of the updated author.
+     */
     @Override
     @Transactional
     public AuthorDto update(Author author) {
@@ -67,6 +94,11 @@ public class AuthorServiceImpl implements AuthorService {
         return authorMapper.toDto(updatedAuthor);
     }
 
+    /**
+     * Removes an author by their ID.
+     *
+     * @param id The ID of the author to be removed.
+     */
     @Override
     @Transactional
     public void removeById(UUID id) {
@@ -75,6 +107,12 @@ public class AuthorServiceImpl implements AuthorService {
         log.info("Removed author with id {}", id);
     }
 
+    /**
+     * Finds an author by their name.
+     *
+     * @param authorName The name of the author to be found.
+     * @return The author with the specified name, or null if not found.
+     */
     @Override
     public Author findByName(String authorName) {
         Author author = repository.findAuthorByName(authorName);

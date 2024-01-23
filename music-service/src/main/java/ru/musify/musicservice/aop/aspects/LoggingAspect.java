@@ -7,11 +7,19 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 import ru.musify.musicservice.handler.exception.LoggingException;
 
+/**
+ * Aspect for logging method calls and results.
+ */
 @Slf4j
 @Aspect
 @Component
 public class LoggingAspect {
 
+    /**
+     * Advice for logging method calls and results.
+     * @param joinPoint - the join point for the method call
+     * @return the result of the method call
+     */
     @Around("@within(ru.musify.musicservice.aop.Loggable) || @annotation(ru.musify.musicservice.aop.Loggable)")
     public Object loggingAdvice(ProceedingJoinPoint joinPoint) {
         String method = joinPoint.getSignature().toShortString();
