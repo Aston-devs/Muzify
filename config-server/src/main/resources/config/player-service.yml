@@ -1,0 +1,23 @@
+server:
+  port: 8081
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+      instance:
+        prefer-ip-address: true
+        hostname: localhost
+s3:
+  endpointUrl: https://hb.ru-msk.vkcs.cloud
+  accessKey: 2JsphuxDdFwPhhsb5mGDox
+  secretKey: 6jVsKEUvBqNJthDffVHiHkGeY65yUJLzkFs8q4LKAGVs
+  bucketName: musify
+spring:
+  servlet:
+    multipart:
+      max-file-size: 30MB
+      max-request-size: 30MB
+  kafka:
+    bootstrap-servers: localhost:9092

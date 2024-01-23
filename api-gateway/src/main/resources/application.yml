@@ -1,22 +1,18 @@
-server:
-  port: 8080
 spring:
+  profiles:
+    active: native
   application:
     name: api-gateway
   config:
-    import: optional:configserver:http://localhost:8888
+    import: configserver:http://localhost:8888
   cloud:
-    gateway:
+    config:
       discovery:
-        locator:
-          enabled: true
-          lower-case-service-id: true
-eureka:
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: http://localhost:8761/eureka
-  instance:
-    prefer-ip-address: true
-    hostname: localhost
+        enabled: true
+        service-id: config-server
+      fail-fast: true
+      retry:
+        initial-interval: 2000
+        max-interval: 10000
+        multiplier: 2
+        max-attempts: 10

@@ -1,0 +1,30 @@
+server:
+  port: 8090
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+    hostname: localhost
+
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+  datasource:
+    name: user_db
+    url: jdbc:postgresql://localhost:54320/user_db
+    username: user_admin
+    password: user_password
+  flyway:
+    enabled: true
+    repair: true
+  jpa:
+    hibernate:
+      ddl-auto: validate
+      show-sql: true
+
+jwt_secret: "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970"

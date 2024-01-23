@@ -1,0 +1,43 @@
+@import url("https://fonts.googleapis.com/css2?family=Gabarito:wght@400..900&display=swap");
+
+.bar-container {
+  margin: 2rem auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.music-bar-button {
+  color: var(--2, #503e74);
+  font-family: "Gabarito", sans-serif;
+  font-size: 1.73731rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background-color: white;
+  padding: 0.5rem 1rem;
+}
+
+.music-bar-button.active {
+  color: white;
+  display: flex;
+  width: 8.9375rem;
+  height: 2.5625rem;
+  padding: 0.43431rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.43431rem;
+  border-radius: 0.75rem;
+  background: var(--2, #503e74);
+}
+
+.playlist-container {
+  margin: 2rem auto;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}

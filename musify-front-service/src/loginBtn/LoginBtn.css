@@ -1,0 +1,19 @@
+@import url("https://fonts.googleapis.com/css2?family=Gabarito:wght@400..900&display=swap");
+
+.loginBtn {
+  display: flex;
+  width: 8.625rem;
+  padding: 0.64369rem 2.875rem 0.66138rem 2.875rem;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.85819rem;
+  border: 0.687px solid var(--2, #503e74);
+  background: #d0b8ff;
+  font-family: "Gabarito", sans-serif;
+  font-weight: 400;
+}
+
+.loginBtn:hover {
+  background-color: #503e74;
+  color: #fff;
+}

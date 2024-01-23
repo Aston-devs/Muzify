@@ -58,4 +58,10 @@ subprojects {
     tasks.test {
         useJUnitPlatform()
     }
+
+    configurations {
+        compileOnly {
+            extendsFrom(annotationProcessor.get())
+        }
+    }
 }

@@ -1,0 +1,33 @@
+server:
+  port: 8085
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+    hostname: localhost
+
+spring:
+  datasource:
+    name: music_db
+    username: music_admin
+    password: music_password
+    url: jdbc:postgresql://localhost:54321/music_db
+  jpa:
+    properties:
+      hibernate:
+        default_schema: music_service
+  flyway:
+    url: jdbc:postgresql://localhost:54321/music_db
+    user: music_admin
+    password: music_password
+    locations: classpath:db/migration
+    schemas: music_service
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: muzify-song
