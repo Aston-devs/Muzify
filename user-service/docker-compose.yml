@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  db:
+    container_name: postgres
+    image: postgres:15-alpine3.18
+    restart: always
+    ports:
+      - "54320:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-user_admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-user_password}
+      POSTGRES_DB: user_db
+    networks:
+      - muzify_network
+
+  keycloak:
+    container_name: keycloak
+    image: jboss/keycloak
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: postgres
+      DB_DATABASE: user_db
+      DB_USER: ${POSTGRES_USER:-user_admin}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-user_password}
+      KEYCLOAK_USER: user_admin
+      KEYCLOAK_PASSWORD: user_password
+    ports:
+      - "8181:8080"
+    depends_on:
+      - db
+    networks:
+      - muzify_network
+
+networks:
+  muzify_network:
+    driver: bridge

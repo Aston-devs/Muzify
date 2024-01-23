@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:15-alpine3.18
+    restart: always
+    ports:
+      - "54321:5432"
+    environment:
+      - POSTGRES_USER=music_admin
+      - POSTGRES_PASSWORD=music_password
+      - POSTGRES_DB=music_db
+
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_PASSWORD=my-password
+      - REDIS_PORT=6379
+      - REDIS_DATABASES=16

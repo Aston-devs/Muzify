@@ -3,8 +3,10 @@ server:
 spring:
   application:
     name: config-server
+  profiles:
+    active: native
   cloud:
     config:
       server:
         native:
-          search-locations:
+          search-locations: classpath:/config/

@@ -1,0 +1,14 @@
+@import url("https://fonts.googleapis.com/css2?family=Gabarito:wght@400..900&display=swap");
+
+.playlist-word {
+  color: var(--2, #503e74);
+  font-family: "Gabarito", sans-serif;
+  font-size: 2.25rem;
+  font-style: normal;
+  font-weight: bold;
+  line-height: normal;
+}
+
+.player-container {
+  margin: 5rem 6.25rem;
+}
