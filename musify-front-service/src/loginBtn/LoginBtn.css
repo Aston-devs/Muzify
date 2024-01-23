@@ -14,5 +14,6 @@
 }
 
 .loginBtn:hover {
-  opacity: 0.8;
+  background-color: #503e74;
+  color: #fff;
 }

@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./AdminPage.css";
 
 export default function AdminPage() {
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [jwtToken, setJwtToken] = useState("");
   const [audioFile, setAudioFile] = useState(null);
   const [imageFile, setImageFile] = useState(null);
+  const [buttonState, setButtonState] = useState("Upload");
 
   useEffect(() => {
     const storedToken = localStorage.getItem("jwtToken");
@@ -51,10 +54,18 @@ export default function AdminPage() {
           },
         }
       );
+      console.log(response.status);
+      if (response.status === 200) {
+        setButtonState("Success");
+      }
       console.log(response.data);
     } catch (error) {
       console.error("Ошибка при отправке запроса:", error);
     }
+  };
+
+  const clickDashboardHandler = () => {
+    navigate("/dashboard");
   };
 
   return (
@@ -102,9 +113,14 @@ export default function AdminPage() {
           onChange={handleAuthorChange}
         />
       </div>
-      <button className="submit-btn" type="submit">
-        Upload
-      </button>
+      <div className="buttons">
+        <button className="submit-btn" type="submit">
+          {buttonState}
+        </button>
+        <button className="submit-btn" onClick={clickDashboardHandler}>
+          Dashboard
+        </button>
+      </div>
     </form>
   );
 }
