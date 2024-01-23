@@ -24,31 +24,71 @@ import ru.musify.userservice.valid.UserValidator;
 import java.util.Collection;
 import java.util.UUID;
 
+/**
+ * This class represents the REST controller for handling authentication-related endpoints.
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
 public class AuthenticationController {
 
+    /**
+     * The service for JWT operations.
+     */
     private final JwtService jwtService;
 
+    /**
+     * The validator for user input.
+     */
     private final UserValidator userValidator;
 
+    /**
+     * The service for user details.
+     */
     private final UserDetailsServiceImpl userDetailsService;
 
+    /**
+     * The service for user authentication.
+     */
     private final AuthenticationService authenticationService;
 
+    /**
+     * The service for producing Kafka messages.
+     */
     private final KafkaProducerService kafkaProducerService;
 
+    /**
+     * The authentication manager.
+     */
     private final AuthenticationManager authenticationManager;
 
+    /**
+     * Retrieves the user ID based on the username.
+     *
+     * @param userName The username of the user.
+     * @return The ID of the user.
+     */
     private UUID getUserID(String userName) {
         return userDetailsService.loadUserByUsername(userName).getID();
     }
 
+    /**
+     * Retrieves the roles associated with the user.
+     *
+     * @param username The username of the user.
+     * @return The roles associated with the user.
+     */
     private Collection<? extends GrantedAuthority> getUserRole(String username) {
         return userDetailsService.loadUserByUsername(username).getAuthorities();
     }
 
+    /**
+     * Handles the user signup process.
+     *
+     * @param request        The signup request containing user details.
+     * @param bindingResult  The result of the validation.
+     * @return               The response entity containing the token and user information.
+     */
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody @Valid SignUpRequest request, BindingResult bindingResult) {
         userValidator.validate(request, bindingResult);
@@ -65,6 +105,12 @@ public class AuthenticationController {
         return ResponseEntity.ok(new ResponseData(token, userId, role.toString()));
     }
 
+    /**
+     * Handles the user login process.
+     *
+     * @param request  The login request containing user credentials.
+     * @return         The response entity containing the token and user information.
+     */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         UsernamePasswordAuthenticationToken authInputToken = new UsernamePasswordAuthenticationToken(
@@ -82,6 +128,12 @@ public class AuthenticationController {
         return ResponseEntity.ok(new ResponseData(token, userId, role.toString()));
     }
 
+    /**
+     * Validates the provided token.
+     *
+     * @param token  The token to be validated.
+     * @return       The validation result.
+     */
     @GetMapping("/validate")
     public String validateToken(@RequestParam("token") String token) {
         jwtService.validateTokenAndRetrieveClaim(token);

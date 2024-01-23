@@ -16,14 +16,32 @@ import ru.musify.userservice.services.JwtService;
 
 import java.io.IOException;
 
+/**
+ * This class represents a filter for JWT-based authentication.
+ */
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    /**
+     * The service for JWT operations.
+     */
     private final JwtService jwtService;
 
+    /**
+     * The service for user details.
+     */
     private final UserDetailsService userDetailsService;
 
+    /**
+     * Performs the filter logic for JWT-based authentication.
+     *
+     * @param request       The HTTP request.
+     * @param response      The HTTP response.
+     * @param filterChain   The filter chain for invoking the next filter in the chain.
+     * @throws IOException      If an I/O error occurs during the filter execution.
+     * @throws ServletException If a servlet exception occurs during the filter execution.
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         String authHeader = request.getHeader("Authorization");
