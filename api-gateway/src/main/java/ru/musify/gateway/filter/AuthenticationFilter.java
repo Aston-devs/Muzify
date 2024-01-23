@@ -16,14 +16,33 @@ import reactor.core.publisher.Mono;
 import ru.musify.gateway.util.JWTUtil;
 
 
+/**
+ * Authentication filter for handling authorization and user roles
+ * with properties <b>jwtUtil</b>, <b>secret</b>, <b>ROLE_ADMIN</b>
+ */
 @Component
 public class AuthenticationFilter extends AbstractGatewayFilterFactory<AuthenticationFilter.Config> {
 
+    /**
+     * Validator for checking routes
+     */
     private final RouteValidator validator;
 
+    /**
+     * Utility for handling JSON Web Tokens
+     */
     private final JWTUtil jwtUtil;
+
+    /**
+     * The role name for administrators
+     */
     private static final String ROLE_ADMIN = "ROLE_ADMIN";
 
+    /**
+     * Constructor for AuthenticationFilter.
+     * @param validator - the route validator
+     * @param jwtUtil - the JWT utility
+     */
     @Autowired
     public AuthenticationFilter(RouteValidator validator, JWTUtil jwtUtil) {
         super(Config.class);
@@ -31,12 +50,23 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
         this.jwtUtil = jwtUtil;
     }
 
+    /**
+     * Handles error response.
+     * @param exchange - the server web exchange
+     * @param httpStatus - the HTTP status
+     * @return a Mono<Void> representing the completion of the response
+     */
     private Mono<Void> onError(ServerWebExchange exchange, HttpStatus httpStatus) {
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(httpStatus);
         return response.setComplete();
     }
 
+    /**
+     * Applies the filter to the request.
+     * @param config - the configuration
+     * @return the GatewayFilter for the request
+     */
     @Override
     public GatewayFilter apply(Config config) {
         return (((exchange, chain) -> {
@@ -69,6 +99,9 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
         }));
     }
 
+    /**
+     * Configuration class for AuthenticationFilter.
+     */
     public static class Config {
     }
 

@@ -15,6 +15,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Represents a song entity in the music service.
+ */
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Getter

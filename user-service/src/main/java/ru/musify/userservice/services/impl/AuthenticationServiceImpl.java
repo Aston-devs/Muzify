@@ -12,17 +12,35 @@ import ru.musify.userservice.model.User;
 import ru.musify.userservice.repository.UserRepository;
 import ru.musify.userservice.services.AuthenticationService;
 
+/**
+ * This class provides the implementation for user authentication operations.
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
 
+    /**
+     * The mapper for converting SignUpRequest DTOs to User entities.
+     */
     private final UserMapper mapper;
 
+    /**
+     * The repository for accessing user data.
+     */
     private final UserRepository userRepository;
 
+    /**
+     * The encoder for encoding and verifying passwords.
+     */
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * Signs up a new user based on the provided sign-up request.
+     *
+     * @param request The sign-up request containing user details.
+     * @return The user entity representing the signed-up user.
+     */
     @Transactional(rollbackFor = ValidationException.class)
     public User signup(SignUpRequest request) {
         User user = mapper.toUser(request);

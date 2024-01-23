@@ -2,6 +2,9 @@ package ru.musify.musicservice.entity;
 
 import lombok.Getter;
 
+/**
+ * Represents the genre of a music track.
+ */
 @Getter
 public enum Genre {
     CLASSICAL("Classical"),

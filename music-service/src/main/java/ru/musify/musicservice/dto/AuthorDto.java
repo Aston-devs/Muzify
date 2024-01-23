@@ -11,6 +11,9 @@ import java.util.UUID;
 import lombok.Builder;
 import ru.musify.musicservice.entity.Genre;
 
+/**
+ * Data transfer object (DTO) for representing an author.
+ */
 @Builder
 public record AuthorDto(@NotNull UUID id,
                         @NotNull @Size(min = 2, max = 150) @NotEmpty @NotBlank String name,

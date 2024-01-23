@@ -5,6 +5,9 @@ import lombok.*;
 
 import java.util.UUID;
 
+/**
+ * This class represents a user entity in the user-service.
+ */
 @Entity
 @Getter
 @Setter

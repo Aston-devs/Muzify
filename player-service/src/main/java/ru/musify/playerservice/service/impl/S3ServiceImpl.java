@@ -23,15 +23,31 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * This class represents an implementation of the S3Service interface for interacting with Amazon S3.
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class S3ServiceImpl implements S3Service {
 
+    /**
+     * The name of the S3 bucket to be used for file storage.
+     */
     @Value("${s3.bucketName}")
     private String bucketName;
+
+    /**
+     * The S3 client used for interacting with Amazon S3.
+     */
     private final S3Client s3Client;
 
+    /**
+     * Uploads a file to the specified object key in the S3 bucket.
+     *
+     * @param file       The file to be uploaded.
+     * @param objectKey  The key under which the file will be stored in the S3 bucket.
+     */
     @Override
     public void uploadFile(MultipartFile file, String objectKey) {
         try {
@@ -48,6 +64,12 @@ public class S3ServiceImpl implements S3Service {
         }
     }
 
+    /**
+     * Retrieves a file from the S3 bucket based on the specified object key.
+     *
+     * @param objectKey  The key of the file to be retrieved from the S3 bucket.
+     * @return           A Mono emitting the resource representing the retrieved file content.
+     */
     @Override
     public Mono<Resource> getFile(String objectKey) {
         GetObjectRequest getObjectRequest = GetObjectRequest.builder()
