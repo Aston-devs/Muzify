@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 import ru.musify.playerservice.service.impl.S3ServiceImpl;
 
+/**
+ * This class represents the controller for streaming audio content in the application.
+ */
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -14,6 +17,12 @@ import ru.musify.playerservice.service.impl.S3ServiceImpl;
 public class StreamingController {
     private final S3ServiceImpl s3Service;
 
+    /**
+     * Retrieves and streams the audio content for playback.
+     * @param audioUrl The URL of the audio to be played.
+     * @param range The range of bytes for streaming the audio.
+     * @return A Mono emitting the resource representing the audio content.
+     */
     @GetMapping(value = "/play/{audioUrl}", produces = "audio/mp3")
     public Mono<Resource> playMusic(@PathVariable String audioUrl,
                                     @RequestHeader String range) {
